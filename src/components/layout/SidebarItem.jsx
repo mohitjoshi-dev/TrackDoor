@@ -7,23 +7,32 @@ export default function SidebarItem({
   collapsed,
 }) {
   return (
-   <NavLink
-    to={to}
-    className={({ isActive }) =>
-        `mb-2 flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-200 ${
-        isActive
-            ? "bg-cyan-400/15 text-cyan-400"
-            : "text-slate-400 hover:bg-slate-800 hover:text-white"
-        }`
-    }
-    >
-    <Icon className="h-5 w-5 shrink-0" />
+    <NavLink to={to}>
+      {({ isActive }) => (
+        <div
+          className={`
+            relative mb-2 flex items-center gap-3 rounded-xl px-3 py-3
+            transition-all duration-300
+            ${
+              isActive
+                ? "border border-cyan-500/20 bg-cyan-500/10 text-cyan-300 shadow-lg shadow-cyan-500/10"
+                : "text-slate-400 hover:bg-slate-800/70 hover:text-white hover:translate-x-1"
+            }
+          `}
+        >
+          {isActive && (
+            <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
+          )}
 
-    {!collapsed && (
-        <span className="whitespace-nowrap text-sm font-medium">
-        {label}
-        </span>
-    )}
+          <Icon className="h-5 w-5 shrink-0" />
+
+          {!collapsed && (
+            <span className="whitespace-nowrap text-sm font-medium">
+              {label}
+            </span>
+          )}
+        </div>
+      )}
     </NavLink>
   );
 }

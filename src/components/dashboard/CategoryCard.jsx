@@ -1,3 +1,0 @@
-export default function CategoryCard() {
-  return <div>Category Card</div>;
-}

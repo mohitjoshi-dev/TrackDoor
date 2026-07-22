@@ -1,7 +1,7 @@
 import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
 import StatsCard from "@/components/dashboard/StatsCard";
-import MonthlyCard from "@/components/dashboard/MonthlyCard";
-import CategoryCard from "@/components/dashboard/CategoryCard";
+import MonthlyCard from "@/components/dashboard/MonthlyOverview";
+import CategoryCard from "@/components/dashboard/CategoryBreakdown";
 import RecentTransaction from "@/components/dashboard/RecentTransaction";
 import { Plus } from "lucide-react";
 import { stats } from "@/constants/dashboard";
@@ -29,6 +29,8 @@ export default function Dashboard() {
             icon={stat.icon}
             change={stat.change}
             changeType={stat.changeType}
+            color={stat.color}
+
           />
         ))}
         </div>

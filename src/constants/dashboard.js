@@ -14,6 +14,7 @@ export const stats = [
     icon: Wallet,
     change: "+8.2%",
     changeType: "increase",
+    color: "cyan",
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ export const stats = [
     icon: ArrowDownCircle,
     change: "+12%",
     changeType: "increase",
+    color: "emerald",
   },
   {
     id: 3,
@@ -32,6 +34,7 @@ export const stats = [
     icon: ArrowUpCircle,
     change: "-5%",
     changeType: "decrease",
+    color: "rose",
   },
   {
     id: 4,
@@ -41,5 +44,7 @@ export const stats = [
     icon: PiggyBank,
     change: "+18%",
     changeType: "increase",
+    color: "violet",
   },
 ];
+
