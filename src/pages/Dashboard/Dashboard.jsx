@@ -1,7 +1,7 @@
 import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
 import StatsCard from "@/components/dashboard/StatsCard";
-import MonthlyCard from "@/components/dashboard/MonthlyOverview";
-import CategoryCard from "@/components/dashboard/CategoryBreakdown";
+import MonthlyOverview from "@/components/dashboard/MonthlyOverview";
+import CategoryBreakdown from "@/components/dashboard/CategoryBreakdown";
 import RecentTransaction from "@/components/dashboard/RecentTransaction";
 import { Plus } from "lucide-react";
 import { stats } from "@/constants/dashboard";
@@ -36,13 +36,15 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-3 gap-6">
         <div className="col-span-2">
-          <MonthlyCard />
+          <MonthlyOverview />
         </div>
 
-        <CategoryCard />
-      </section>
+        <div className="col-span-1">
+          <CategoryBreakdown />
+        </div>
+      </div>
 
       <section>
         <RecentTransaction />

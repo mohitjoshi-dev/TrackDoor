@@ -8,7 +8,7 @@ import {
 export const stats = [
   {
     id: 1,
-    title: "Total Balance",
+    title: "Available Balance",
     value: "₹52,480",
     subtitle: "Compared to last month",
     icon: Wallet,

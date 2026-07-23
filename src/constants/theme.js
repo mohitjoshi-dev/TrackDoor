@@ -1,15 +1,15 @@
 export const COLORS = {
-  background: "#020817",
-  sidebar: "#0F172A",
-  card: "#111827",
-  border: "#334155",
+  background: "var(--color-background)",
+  sidebar: "var(--color-sidebar)",
+  card: "var(--color-card)",
+  border: "var(--color-border)",
 
-  primary: "#8FDDDF",
+  primary: "var(--color-primary)",
 
-  success: "#10B981",
+  success: "#10B981", // Kept these static as standard utility colors
   danger: "#F43F5E",
   warning: "#F59E0B",
 
-  text: "#FFFFFF",
-  muted: "#94A3B8",
+  text: "var(--color-foreground)",
+  muted: "var(--color-muted-foreground)",
 };

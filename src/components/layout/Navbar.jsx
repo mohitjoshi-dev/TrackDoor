@@ -1,93 +1,124 @@
 import {
   Bell,
+  Palette,
   Moon,
+  Sun,
+  Monitor, // Kept your original import
   Plus,
   Search,
   ChevronDown,
+  Check,
+  Circle,
 } from "lucide-react";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+
+import { useTheme } from "@/context/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Navbar() {
-  return (
-    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-white/10 bg-slate-950/70 px-8 backdrop-blur-xl">
+  const { theme, setLight, setMidnight, setAmoled } = useTheme();
+  const isLight = theme === "light";
 
+  return (
+    <header
+      className={`sticky top-0 z-40 flex h-20 items-center justify-between px-8 backdrop-blur-xl transition-all duration-300 ${
+        isLight
+          ? "border-b border-slate-200/60 bg-white/45 shadow-lg shadow-slate-200/40 supports-backdrop-filter:bg-white/35"
+          : "border-b border-white/10 bg-slate-950/70"
+      }`}
+    >
       {/* Left */}
       <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-              Dashboard
-          </h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          Dashboard
+        </h1>
       </div>
 
       {/* Right */}
       <div className="flex items-center gap-4">
-
         {/* Search */}
-
         <div className="relative hidden lg:block">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-
-            <Input
-                placeholder="Search transactions..."
-                className="h-11 w-80 rounded-xl border-white/10 bg-slate-900/70 pl-11 text-white placeholder:text-slate-500 focus-visible:border-cyan-500 
-                         focus-visible:ring-cyan-500/20" />
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search transactions..."
+            className="h-11 w-80 rounded-xl border-border bg-white/55 backdrop-blur-md pl-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
+          />
         </div>
 
         {/* Notification */}
-
         <Button
           size="icon"
           variant="ghost"
-          className="h-11 w-11 rounded-xl border border-white/10 bg-slate-900/70 transition-all hover:scale-105 hover:bg-slate-800"
+          className="relative h-11 w-11 rounded-xl border border-border bg-white/55 backdrop-blur-md transition-all hover:scale-105 hover:bg-secondary"
         >
-          <div className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 ring-2 ring-slate-900" />
-          </div>  
+          <Bell className="h-5 w-5 text-muted-foreground" />
+          {/* Notification Dot */}
+          <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" />
         </Button>
 
         {/* Theme */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-11 gap-2 rounded-xl border border-border bg-white/55 backdrop-blur-md px-4 hover:bg-secondary"
+            >
+              <Palette className="h-4 w-4 text-primary" />
+              <span className="hidden xl:block">Appearance</span>
+            </Button>
+          </DropdownMenuTrigger>
 
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-11 w-11 rounded-xl border border-white/10 bg-slate-900/70 transition-all hover:scale-105 hover:bg-slate-800"
-        >
-          <Moon className="h-5 w-5" />
-        </Button>
+          <DropdownMenuContent
+            align="end"
+            className="w-52 rounded-xl border-border bg-card text-foreground"
+          >
+            <DropdownMenuLabel>Choose Theme</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-border" />
+
+            <DropdownMenuItem onClick={setMidnight} className="flex justify-between hover:bg-secondary cursor-pointer">
+              <span className="flex items-center gap-2"><Moon className="h-4 w-4" />Midnight</span>
+              {theme === "midnight" && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={setLight} className="flex justify-between hover:bg-secondary cursor-pointer">
+              <span className="flex items-center gap-2"><Sun className="h-4 w-4" />Light</span>
+              {theme === "light" && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={setAmoled} className="flex justify-between hover:bg-secondary cursor-pointer">
+              <span className="flex items-center gap-2"><Circle className="h-4 w-4 fill-current" />AMOLED</span>
+              {theme === "amoled" && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Add Button */}
-
-        <Button className="h-11 gap-2 rounded-xl bg-cyan-500 px-6 font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition-all hover:scale-105 hover:bg-cyan-400">
+        <Button className="h-11 gap-2 rounded-xl bg-primary px-6 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:opacity-90">
           <Plus className="h-4 w-4" />
           Add Expense
         </Button>
 
         {/* Profile */}
-
-        <button className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900 px-3 py-2 hover:bg-slate-800">
-
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-blue-500 font-bold text-slate-950">
+        <button className="flex items-center gap-3 rounded-xl border border-border bg-card px-3 py-2 hover:bg-secondary transition-colors">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-primary to-blue-500 font-bold text-primary-foreground">
             MJ
           </div>
-
           <div className="hidden text-left xl:block">
-            <p className="text-sm font-semibold text-white">
-              Mohit
-            </p>
-
-            <p className="text-xs text-slate-400">
-              Free Plan
-            </p>
+            <p className="text-sm font-semibold text-foreground">Mohit</p>
+            <p className="text-xs text-muted-foreground">Free Plan</p>
           </div>
-
-          <ChevronDown className="h-4 w-4 text-slate-400" />
-
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </button>
-
       </div>
-
     </header>
   );
 }
