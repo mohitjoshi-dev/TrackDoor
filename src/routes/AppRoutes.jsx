@@ -10,6 +10,7 @@ import Analytics from "../pages/Analytics/Analytics";
 import Profile from "../pages/Profile/Profile";
 import NotFound from "../pages/NotFound/NotFound";
 
+ 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
