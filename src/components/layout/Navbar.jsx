@@ -58,21 +58,20 @@ export default function Navbar() {
         <Button
           size="icon"
           variant="ghost"
-          className="relative h-11 w-11 rounded-xl border border-border bg-white/55 backdrop-blur-md transition-all hover:scale-105 hover:bg-secondary"
+          className="relative h-11 w-11 rounded-xl border border-border bg-transparent transition-all hover:scale-105 hover:bg-secondary"
         >
           <Bell className="h-5 w-5 text-muted-foreground" />
           {/* Notification Dot */}
-          <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" />
+          <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
         </Button>
 
         {/* Theme */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant="ghost"
-              className="h-11 gap-2 rounded-xl border border-border bg-white/55 backdrop-blur-md px-4 hover:bg-secondary"
+              className="h-11 gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:opacity-90"
             >
-              <Palette className="h-4 w-4 text-primary" />
+              <Palette className="h-4 w-4" />
               <span className="hidden xl:block">Appearance</span>
             </Button>
           </DropdownMenuTrigger>

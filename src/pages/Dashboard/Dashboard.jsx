@@ -4,9 +4,67 @@ import MonthlyOverview from "@/components/dashboard/MonthlyOverview";
 import CategoryBreakdown from "@/components/dashboard/CategoryBreakdown";
 import RecentTransaction from "@/components/dashboard/RecentTransaction";
 import { Plus } from "lucide-react";
-import { stats } from "@/constants/dashboard";
+import { useMemo } from "react";
+import { useTransactions } from "@/context/TransactionsContext";
 
 export default function Dashboard() {
+const { transactions } = useTransactions(); 
+console.log("Dashboard Transactions:", transactions);
+
+const stats = useMemo(() => {
+  const income = transactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const expenses = transactions
+    .filter((t) => t.type === "expense")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const balance = income - expenses;
+
+  const savings =
+    income > 0 ? Math.round((balance / income) * 100) : 0;
+
+  return [
+    {
+      id: 1,
+      title: "Total Balance",
+      value: `₹${balance.toLocaleString("en-IN")}`,
+      subtitle: "Current available balance",
+      change: `${savings}% Saved`,
+      changeType: savings >= 0 ? "increase" : "decrease",
+      color: "cyan",
+    },
+    {
+      id: 2,
+      title: "Income",
+      value: `₹${income.toLocaleString("en-IN")}`,
+      subtitle: "Total income",
+      change: "+100%",
+      changeType: "increase",
+      color: "emerald",
+    },
+    {
+      id: 3,
+      title: "Expenses",
+      value: `₹${expenses.toLocaleString("en-IN")}`,
+      subtitle: "Total expenses",
+      change: "-100%",
+      changeType: "decrease",
+      color: "rose",
+    },
+    {
+      id: 4,
+      title: "Savings Rate",
+      value: `${savings}%`,
+      subtitle: "Income saved",
+      change: `${balance >= 0 ? "+" : ""}₹${balance.toLocaleString("en-IN")}`,
+      changeType: balance >= 0 ? "increase" : "decrease",
+      color: "violet",
+    },
+  ];
+}, [transactions]);
+
   return (
     <div className="space-y-8">
       <WelcomeBanner

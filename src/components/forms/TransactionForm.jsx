@@ -8,29 +8,70 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function TransactionForm({ onCancel, onSubmit }) {
-const [formData, setFormData] = useState({
+export default function TransactionForm({ onCancel, onSubmit, initialData, mode = "add", }) {
+const [formData, setFormData] = useState(
+        initialData || {
         title: "",
         amount: "",
         category: "",
         type: "expense",
         notes: "",
       });
+
+useEffect(() => {
+  if (initialData) {
+    setFormData(initialData);
+  }
+}, [initialData]);      
   
-        const handleChange = (e) => {
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
   setFormData((prev) => ({
     ...prev,
-    [e.target.name]: e.target.value,
+    [name]: value,
   }));
-};   
+
+  setErrors((prev) => ({
+    ...prev,
+    [name]: "",
+  }));
+};
+
+const [errors, setErrors] = useState({});
 
 const handleSubmit = (e) => {
   e.preventDefault();
 
-  onSubmit(formData);
+  const newErrors = {};
+
+  if (!formData.title.trim()) {
+    newErrors.title = "Transaction name is required.";
+  }
+
+  if (!formData.amount || Number(formData.amount) <= 0) {
+    newErrors.amount = "Amount must be greater than 0.";
+  }
+
+  if (!formData.category) {
+    newErrors.category = "Please select a category.";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({});
+
+onSubmit({
+  ...formData,
+  amount: Number(formData.amount),
+  });
 };
+
     return (
     <form onSubmit={handleSubmit} className="space-y-5">  
       
@@ -44,6 +85,11 @@ const handleSubmit = (e) => {
           onChange={handleChange}
           placeholder="e.g. Grocery Shopping"
         />
+        {errors.title && (
+        <p className="text-sm text-red-500 mt-1">
+          {errors.title}
+        </p>
+        )}
       </div>  
 
       {/* Amount */}
@@ -57,6 +103,11 @@ const handleSubmit = (e) => {
           onChange={handleChange}
           placeholder="₹0.00"
         />
+        {errors.amount && (
+        <p className="text-sm text-red-500 mt-1">
+          {errors.amount}
+        </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -64,13 +115,19 @@ const handleSubmit = (e) => {
 
         <Select
           value={formData.category}
-          onValueChange={(value) =>
-            setFormData((prev) => ({
-              ...prev,
-              category: value,
-            }))
-          }
+          onValueChange={(value) => {
+          setFormData((prev) => ({
+            ...prev,
+            category: value,
+          }));
+
+          setErrors((prev) => ({
+            ...prev,
+            category: "",
+          }));
+        }}
         >
+          
           <SelectTrigger>
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
@@ -83,6 +140,13 @@ const handleSubmit = (e) => {
             <SelectItem value="income">💰 Income</SelectItem>
           </SelectContent>
         </Select>
+      
+      {errors.category && (
+          <p className="text-sm text-red-500 mt-1">
+            {errors.category}
+          </p>
+          )}
+
       </div>
       <div className="space-y-2">
         <Label>Type</Label>
@@ -151,7 +215,7 @@ const handleSubmit = (e) => {
           type="submit"
           className="rounded-xl bg-primary px-5 py-2 font-medium text-primary-foreground transition-all hover:opacity-90"
         >
-          Add Transaction
+         {mode === "edit" ? "Save Changes" : "Add Transaction"}
         </button>
       </div>
     </form>

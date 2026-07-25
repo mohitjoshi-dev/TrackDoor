@@ -1,8 +1,12 @@
-import { recentTransactions } from "@/constants/transactions";
+import { useTransactions } from "@/context/TransactionsContext";
 import TransactionItem from "./TransactionItem";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function RecentTransactions() {
+  const { transactions, setTransactions } = useTransactions();
+  const recentTransactions = [...transactions].slice(0, 4 );
+
   return (
     <div className="rounded-3xl border border-border/50 bg-card/70 backdrop-blur-xl p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between">
@@ -31,6 +35,13 @@ export default function RecentTransactions() {
           <TransactionItem
             key={transaction.id}
             transaction={transaction}
+            onDelete={(id) => {
+              setTransactions((prev) =>
+                prev.filter((t) => t.id !== id)
+              );
+
+              toast.success("Transaction deleted successfully!");
+            }}
           />
         ))}
       </div>

@@ -1,8 +1,48 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { categoryData } from "@/constants/categoryData";
+import { useMemo } from "react";
+import { useTransactions } from "@/context/TransactionsContext";
 
 export default function CategoryBreakdown() {
+  const { transactions } = useTransactions();
+
+   const categoryData = useMemo(() => {
+    const colors = {
+      Food: "#22c55e",
+      Shopping: "#06b6d4",
+      Bills: "#8b5cf6",
+      Travel: "#f59e0b",
+      Others: "#ef4444",
+    };
+
+    const grouped = {};
+
+    transactions.forEach((transaction) => {
+      if (transaction.type !== "expense") return;
+
+      const category = transaction.category
+        ? transaction.category.charAt(0).toUpperCase() +
+          transaction.category.slice(1).toLowerCase()
+        : "Others";
+
+      grouped[category] =
+        (grouped[category] || 0) + Number(transaction.amount);
+    });
+
+    return Object.entries(grouped).map(([name, value]) => ({
+      name,
+      value,
+      color: colors[name] || "#94a3b8",
+    }));
+  }, [transactions]);
+
+  const totalExpense = useMemo(() => {
+    return categoryData.reduce(
+      (sum, item) => sum + Number(item.value),
+      0
+    );
+  }, [categoryData]);
+
   return (
     <Card className="flex h-full w-full flex-col rounded-2xl border border-border bg-card/70 backdrop-blur-md">
       <CardHeader>
@@ -37,9 +77,10 @@ export default function CategoryBreakdown() {
                 y="48%"
                 textAnchor="middle"
                 fill="var(--color-foreground)"
-                className="text-2xl font-bold"
+                fontSize="24"
+                fontWeight="700"
               >
-                ₹27,520
+                {`₹${totalExpense.toLocaleString()}`}
               </text>
               <text
                 x="50%"

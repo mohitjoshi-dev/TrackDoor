@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTransactions } from "@/context/TransactionsContext";
 import {
   ResponsiveContainer,
   LineChart,
@@ -9,17 +10,26 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import { data7D, data30D, data12M } from "@/constants/chartData";
+
 
 export default function MonthlyOverview() {
   const [selectedPeriod, setSelectedPeriod] = useState("30D");
+  const { transactions } = useTransactions();
 
-  const chartData =
+  const chartData = useMemo(() => {
+  const limit =
     selectedPeriod === "7D"
-      ? data7D
-      : selectedPeriod === "12M"
-      ? data12M
-      : data30D;
+      ? 7
+      : selectedPeriod === "30D"
+      ? 30
+      : 12;
+
+  return transactions.slice(0, limit).map((transaction) => ({
+    month: transaction.date,
+    income: transaction.type === "income" ? transaction.amount : 0,
+    expense: transaction.type === "expense" ? transaction.amount : 0,
+  }));
+  }, [transactions, selectedPeriod]);
 
   return (
     <Card className="flex h-full w-full flex-col rounded-2xl border border-border bg-card/70 backdrop-blur-md">
@@ -99,6 +109,7 @@ export default function MonthlyOverview() {
               tickLine={false}
               axisLine={false}
               padding={{ left: 35, right: 35 }}
+              tickMargin={10}
             />
 
             <YAxis
@@ -119,7 +130,7 @@ export default function MonthlyOverview() {
               }}
             />
             <Line
-              type="natural"
+              type="monotoneX" // <-- Changed from "natural"
               dataKey="income"
               stroke="#10b981"
               strokeWidth={3}
@@ -136,7 +147,7 @@ export default function MonthlyOverview() {
             />
 
             <Line
-              type="natural"
+              type="monotoneX" // <-- Changed from "natural"
               dataKey="expense"
               stroke="#f43f5e"
               strokeWidth={3}

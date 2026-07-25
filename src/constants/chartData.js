@@ -1,42 +1,85 @@
-export const monthlyData = [
-  { month: "Jan", income: 42000, expense: 28000 },
-  { month: "Feb", income: 38000, expense: 25000 },
-  { month: "Mar", income: 50000, expense: 36000 },
-  { month: "Apr", income: 47000, expense: 32000 },
-  { month: "May", income: 58000, expense: 39000 },
-  { month: "Jun", income: 62000, expense: 41000 },
-];
+const chartData = useMemo(() => {
+  const now = new Date();
 
-export const data7D = [
-  { month: "Mon", income: 6000, expense: 4200 },
-  { month: "Tue", income: 7500, expense: 5000 },
-  { month: "Wed", income: 5000, expense: 3500 },
-  { month: "Thu", income: 8000, expense: 5200 },
-  { month: "Fri", income: 9000, expense: 6200 },
-  { month: "Sat", income: 7000, expense: 4800 },
-  { month: "Sun", income: 8500, expense: 5600 },
-];
+  const filtered = transactions.filter((transaction) => {
+    const date = new Date(transaction.date);
 
-export const data30D = [
-  { month: "Jan", income: 42000, expense: 28000 },
-  { month: "Feb", income: 38000, expense: 25000 },
-  { month: "Mar", income: 50000, expense: 36000 },
-  { month: "Apr", income: 47000, expense: 32000 },
-  { month: "May", income: 58000, expense: 39000 },
-  { month: "Jun", income: 62000, expense: 41000 },
-];
+    if (isNaN(date.getTime())) return false;
 
-export const data12M = [
-  { month: "Jan", income: 42000, expense: 28000 },
-  { month: "Feb", income: 45000, expense: 29000 },
-  { month: "Mar", income: 47000, expense: 31000 },
-  { month: "Apr", income: 50000, expense: 33000 },
-  { month: "May", income: 53000, expense: 34000 },
-  { month: "Jun", income: 56000, expense: 36000 },
-  { month: "Jul", income: 58000, expense: 37000 },
-  { month: "Aug", income: 60000, expense: 39000 },
-  { month: "Sep", income: 62000, expense: 41000 },
-  { month: "Oct", income: 65000, expense: 43000 },
-  { month: "Nov", income: 68000, expense: 45000 },
-  { month: "Dec", income: 72000, expense: 47000 },
-];
+    if (selectedPeriod === "7D") {
+      const sevenDaysAgo = new Date(now);
+      sevenDaysAgo.setDate(now.getDate() - 6);
+      return date >= sevenDaysAgo;
+    }
+
+    if (selectedPeriod === "30D") {
+      const thirtyDaysAgo = new Date(now);
+      thirtyDaysAgo.setDate(now.getDate() - 29);
+      return date >= thirtyDaysAgo;
+    }
+
+    return true;
+  });
+
+  // 12 Months
+  if (selectedPeriod === "12M") {
+    const grouped = new Map();
+
+    filtered.forEach((transaction) => {
+      const date = new Date(transaction.date);
+
+      const key = date.toLocaleDateString("en-IN", {
+        month: "short",
+        year: "2-digit",
+      });
+
+      if (!grouped.has(key)) {
+        grouped.set(key, {
+          month: key,
+          income: 0,
+          expense: 0,
+        });
+      }
+
+      const current = grouped.get(key);
+
+      if (transaction.type === "income") {
+        current.income += Number(transaction.amount);
+      } else {
+        current.expense += Number(transaction.amount);
+      }
+    });
+
+    return [...grouped.values()];
+  }
+
+  // 7D & 30D
+  const grouped = new Map();
+
+  filtered.forEach((transaction) => {
+    const date = new Date(transaction.date);
+
+    const key = date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+    });
+
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        month: key,
+        income: 0,
+        expense: 0,
+      });
+    }
+
+    const current = grouped.get(key);
+
+    if (transaction.type === "income") {
+      current.income += Number(transaction.amount);
+    } else {
+      current.expense += Number(transaction.amount);
+    }
+  });
+
+  return [...grouped.values()];
+}, [transactions, selectedPeriod]);
