@@ -1,27 +1,75 @@
+import {
+  UtensilsCrossed,
+  ShoppingBag,
+  Car,
+  Receipt,
+  Lightbulb,
+  Film,
+  HeartPulse,
+  GraduationCap,
+  Package,
+  IndianRupee,
+} from "lucide-react";
+
 export const categoryData = [
   {
+    id: "food",
     name: "Food",
-    value: 8500,
+    icon: UtensilsCrossed,
     color: "#22c55e",
   },
   {
+    id: "shopping",
     name: "Shopping",
-    value: 6400,
+    icon: ShoppingBag,
     color: "#06b6d4",
   },
   {
+    id: "travel",
+    name: "Travel",
+    icon: Car,
+    color: "#3b82f6",
+  },
+  {
+    id: "bills",
     name: "Bills",
-    value: 5000,
+    icon: Receipt,
     color: "#8b5cf6",
   },
   {
-    name: "Transport",
-    value: 3700,
+    id: "utilities",
+    name: "Utilities",
+    icon: Lightbulb,
     color: "#f59e0b",
   },
   {
-    name: "Others",
-    value: 3920,
+    id: "entertainment",
+    name: "Entertainment",
+    icon: Film,
+    color: "#ec4899",
+  },
+  {
+    id: "healthcare",
+    name: "Healthcare",
+    icon: HeartPulse,
     color: "#ef4444",
+  },
+  {
+    id: "education",
+    name: "Education",
+    icon: GraduationCap,
+    color: "#6366f1",
+  },
+  {
+    id: "other",
+    name: "Other",
+    icon: Package,
+    color: "#64748b",
+  },
+  {
+    id: "income",
+    name: "Income",
+    icon: IndianRupee,
+    color: "#16a34a",
   },
 ];

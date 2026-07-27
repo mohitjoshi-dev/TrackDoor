@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
+import { categoryData } from "@/constants/categoryData";
 
 export default function TransactionForm({ onCancel, onSubmit, initialData, mode = "add", }) {
 const [formData, setFormData] = useState(
@@ -133,11 +134,30 @@ onSubmit({
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="food">🍔 Food</SelectItem>
-            <SelectItem value="travel">🚕 Travel</SelectItem>
-            <SelectItem value="shopping">🛍 Shopping</SelectItem>
-            <SelectItem value="bills">💡 Bills</SelectItem>
-            <SelectItem value="income">💰 Income</SelectItem>
+            {categoryData
+              .filter((category) =>
+                formData.type === "income"
+                  ? category.id === "income"
+                  : category.id !== "income"
+              )
+              .map((category) => {
+                const Icon = category.icon;
+
+                return (
+                  <SelectItem
+                    key={category.id}
+                    value={category.id}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        className="h-4 w-4"
+                        style={{ color: category.color }}
+                      />
+                      {category.name}
+                    </div>
+                  </SelectItem>
+                );
+              })}
           </SelectContent>
         </Select>
       

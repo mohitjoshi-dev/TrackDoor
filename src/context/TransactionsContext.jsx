@@ -24,9 +24,47 @@ export function TransactionsProvider({ children }) {
     );
   }, [transactions]);
 
+  // Add Transaction
+  const addTransaction = (transaction) => {
+  setTransactions((prev) => [
+    {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      ...transaction,
+    },
+    ...prev,
+  ]);
+  };
+
+  // Update Transaction
+  const updateTransaction = (id, updatedTransaction) => {
+    setTransactions((prev) =>
+      prev.map((transaction) =>
+        transaction.id === id
+          ? {
+              ...transaction,
+              ...updatedTransaction,
+            }
+          : transaction
+      )
+    );
+  };
+
+  // Delete Transaction
+  const deleteTransaction = (id) => {
+    setTransactions((prev) =>
+      prev.filter((transaction) => transaction.id !== id)
+    );
+  };
+
   return (
     <TransactionsContext.Provider
-      value={{ transactions, setTransactions }}
+      value={{
+        transactions,
+        addTransaction,
+        updateTransaction,
+        deleteTransaction,
+      }}
     >
       {children}
     </TransactionsContext.Provider>
@@ -35,4 +73,4 @@ export function TransactionsProvider({ children }) {
 
 export function useTransactions() {
   return useContext(TransactionsContext);
-}
+} 

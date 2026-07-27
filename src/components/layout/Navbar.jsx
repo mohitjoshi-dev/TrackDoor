@@ -3,12 +3,13 @@ import {
   Palette,
   Moon,
   Sun,
-  Monitor, // Kept your original import
+  Monitor, 
   Plus,
   Search,
   ChevronDown,
   Check,
   Circle,
+  RefreshCw, // <-- Added this import
 } from "lucide-react";
 
 import {
@@ -63,6 +64,19 @@ export default function Navbar() {
           <Bell className="h-5 w-5 text-muted-foreground" />
           {/* Notification Dot */}
           <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
+        </Button>
+
+        {/* Reset Demo Data Button */}
+        <Button
+          variant="outline"
+          onClick={() => {
+            localStorage.removeItem("transactions");
+            window.location.reload();
+          }}
+          className="h-11 gap-2 rounded-xl border border-border bg-card px-4 font-medium text-muted-foreground transition-all hover:scale-105 hover:bg-secondary hover:text-foreground"
+        >
+          <RefreshCw className="h-4 w-4" />
+          <span className="hidden xl:block">Reset Demo</span>
         </Button>
 
         {/* Theme */}

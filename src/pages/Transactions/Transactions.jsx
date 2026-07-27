@@ -2,6 +2,7 @@ import { Plus, Search } from "lucide-react";
 import TransactionItem from "@/components/dashboard/TransactionItem";
 import { useState } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
+
 import {
   Dialog,
   DialogContent,
@@ -9,37 +10,37 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+
 import TransactionForm from "@/components/forms/TransactionForm";
 import { toast } from "sonner";
+import { categoryData } from "@/constants/categoryData";
+import { Button } from "@/components/ui/button";
 
 export default function Transactions() {
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");  
   const [editOpen, setEditOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  
+  // Using the global context instead of local state!
+  const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
 
-  const { transactions, setTransactions } = useTransactions();
+  const filteredTransactions = [...transactions].filter((transaction) => {
+    const matchesSearch =
+      transaction.title
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      transaction.notes
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-  const filteredTransactions = transactions.filter((transaction) => {
-  const query = searchQuery.trim().toLowerCase();
+    const matchesCategory =
+      selectedCategory === "all" ||
+      transaction.category === selectedCategory;
 
-  const matchesSearch =
-    transaction.title.toLowerCase().includes(query) ||
-    transaction.category.toLowerCase().includes(query) ||
-    (transaction.notes || "").toLowerCase().includes(query) ||
-    transaction.amount.toString().includes(query);
-
-  const formattedCategory =
-    transaction.category.charAt(0).toUpperCase() +
-    transaction.category.slice(1);
-
-  const matchesCategory =
-    selectedCategory === "All" ||
-    formattedCategory === selectedCategory;
-
-  return matchesSearch && matchesCategory;
-});
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="space-y-6">
@@ -62,39 +63,37 @@ export default function Transactions() {
       </div>
 
       <div className="rounded-2xl border border-border/50 bg-card p-5">
-        {/* Search */}
-        <div className="group relative">
-          <input
-            type="text"
-            placeholder="Search transactions..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-border/50 bg-background/60 px-4 py-3 pl-11 backdrop-blur-md outline-none transition-all duration-300 focus:border-primary"
-          />
+           {/* Search */}
+          <div className="group relative">
+            <input
+              type="text"
+              placeholder="Search transactions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full rounded-xl border border-border/50 bg-background/60 px-4 py-3 pl-11 backdrop-blur-md outline-none transition-all duration-300 focus:border-primary"
+            />
 
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary"
-          />
-        </div>
-
+            <Search
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary"
+            />
+          </div>
+ 
         {/* Category Chips */}
-        <div className="mt-5 flex flex-wrap gap-3">
-          {["All", "Income", "Food", "Travel", "Shopping", "Bills"].map(
-            (category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                  selectedCategory === category
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary hover:bg-secondary/70"
-                }`}
-              >
-                {category}
-              </button>
-            )
-          )}
+        <div className="mt-5 flex gap-3 overflow-x-auto pb-2 scrollbar-hide scroll-smooth">
+          {[{ id: "all", name: "All" }, ...categoryData].map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+              selectedCategory === category.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary hover:bg-secondary/70"
+              }`}
+            >
+              {category.name}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -109,40 +108,67 @@ export default function Transactions() {
             <span className="min-w-28 text-right font-bold text-muted-foreground">
               {filteredTransactions.length} Transactions
             </span>
-            {/* Invisible placeholder matching the trash button width */}
-            <div className="w-12"></div>
+            {/* Invisible placeholder matching BOTH buttons (Edit + Trash) */}
+            <div className="w-19"></div>
           </div>
         </div>
 
         <div className="divide-y divide-border/40">
-        {filteredTransactions.map((transaction) => (
-          <TransactionItem
-            key={transaction.id}
-            transaction={transaction}
-            onDelete={(id) => {
-              setTransactions((prev) =>
-                prev.filter((t) => t.id !== id)
-              );
+          {filteredTransactions.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="rounded-full bg-primary/10 p-5">
+                  <Search className="h-10 w-10 text-primary" />
+                </div>
 
-              toast.success("Transaction deleted successfully!");
-            }}
-            onEdit={() => {
-              setSelectedTransaction(transaction);
-              setEditOpen(true);
-            }}
-          />
-        ))}
-        {filteredTransactions.length === 0 && (
-          <div className="py-12 text-center">
-            <h3 className="text-lg font-semibold">No transactions found</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Try a different search term.
-            </p>
-          </div>
-        )}
-      </div>
+                <h3 className="mt-6 text-2xl font-semibold">
+                  {searchTerm
+                    ? `No results for "${searchTerm}"`
+                    : selectedCategory !== "all"
+                    ? `No ${
+                        categoryData.find(
+                          (c) => c.id === selectedCategory
+                        )?.name
+                      } transactions`
+                    : "No Transactions Yet"}
+                </h3>
+
+                <p className="mt-2 max-w-sm text-center text-muted-foreground">
+                  {searchTerm || selectedCategory !== "all"
+                    ? "Try changing your search or category filter."
+                    : "Start tracking your finances by adding your first transaction."}
+                </p>
+
+                <Button
+                  variant="outline"
+                  className="mt-8"
+                  onClick={() => {
+                    setSearchTerm("");
+                    setSelectedCategory("all");
+                  }}
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            ) : (
+              filteredTransactions.map((transaction) => (
+                <TransactionItem
+                  key={transaction.id}
+                  transaction={transaction}
+                  onDelete={(id) => {
+                    deleteTransaction(id);
+                    toast.success("Transaction deleted successfully!");
+                  }}
+                  onClick={() => {
+                    setSelectedTransaction(transaction);
+                    setEditOpen(true);
+                  }}
+                />
+              ))
+            )}
+        </div>
       </div>
 
+      {/* Add Transaction Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="overflow-hidden p-0 sm:max-w-xl">
           <DialogHeader className="border-b px-6 py-5">
@@ -156,17 +182,9 @@ export default function Transactions() {
 
           <div className="px-6 py-5">
             <TransactionForm
-              mode="add"
               onCancel={() => setOpen(false)}
               onSubmit={(data) => {
-                const newTransaction = {
-                  id: Date.now(),
-                  ...data,
-                  amount: Number(data.amount),
-                  date: new Date().toISOString(),
-                };
-
-                setTransactions((prev) => [newTransaction, ...prev]);
+                addTransaction(data);
                 toast.success("Transaction added successfully!");
                 setOpen(false);
               }}
@@ -174,44 +192,33 @@ export default function Transactions() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Edit Transaction Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="overflow-hidden p-0 sm:max-w-xl">
-            <DialogHeader className="border-b px-6 py-5">
-              <DialogTitle className="text-2xl font-bold">
-                Edit Transaction
-              </DialogTitle>
+          <DialogHeader className="border-b px-6 py-5">
+            <DialogTitle className="text-2xl font-bold">
+              Edit Transaction
+            </DialogTitle>
 
-              <DialogDescription>
-                Update your transaction details.
-              </DialogDescription>
-            </DialogHeader>
+            <DialogDescription>
+              Update your transaction details.
+            </DialogDescription>
+          </DialogHeader>
 
-            <div className="px-6 py-5">
-              <TransactionForm
-                initialData={selectedTransaction}
-                mode="edit"
-                onCancel={() => setEditOpen(false)}
-                onSubmit={(data) => {
-                setTransactions((prev) =>
-                  prev.map((transaction) =>
-                    transaction.id === selectedTransaction.id
-                      ? {
-                          ...transaction,
-                          ...data,
-                          amount: Number(data.amount),
-                          date: transaction.date,
-                        }
-                      : transaction
-                  )
-                );
-
-                  toast.success("Transaction updated successfully!");
-                  setEditOpen(false);
-                }}
-              />
-            </div>
+          <div className="px-6 py-5">
+            <TransactionForm
+              initialData={selectedTransaction}
+              onCancel={() => setEditOpen(false)}
+              onSubmit={(data) => {
+                updateTransaction(selectedTransaction.id, data);
+                toast.success("Transaction updated successfully!");
+                setEditOpen(false);
+              }}
+            />
+          </div>
         </DialogContent>
-        </Dialog>
+      </Dialog>
     </div>
   );
 }

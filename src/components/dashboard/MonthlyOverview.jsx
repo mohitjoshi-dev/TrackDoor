@@ -11,24 +11,45 @@ import {
   Tooltip,
 } from "recharts";
 
-
 export default function MonthlyOverview() {
   const [selectedPeriod, setSelectedPeriod] = useState("30D");
   const { transactions } = useTransactions();
 
   const chartData = useMemo(() => {
-  const limit =
-    selectedPeriod === "7D"
-      ? 7
-      : selectedPeriod === "30D"
-      ? 30
-      : 12;
+    const limit =
+      selectedPeriod === "7D"
+        ? 7
+        : selectedPeriod === "30D"
+        ? 30
+        : 12;
 
-  return transactions.slice(0, limit).map((transaction) => ({
-    month: transaction.date,
-    income: transaction.type === "income" ? transaction.amount : 0,
-    expense: transaction.type === "expense" ? transaction.amount : 0,
-  }));
+    const grouped = {};
+
+    transactions.slice(0, limit).forEach((transaction) => {
+        let displayDate = transaction.date;
+
+      if (displayDate && (displayDate.includes("T") || displayDate.includes("-"))) {
+        const dateObj = new Date(displayDate);
+        if (!isNaN(dateObj.getTime())) {
+          displayDate = dateObj.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+          });
+        }
+      }
+
+      if (!grouped[displayDate]) {
+        grouped[displayDate] = { month: displayDate, income: 0, expense: 0 };
+      }
+
+      if (transaction.type === "income") {
+        grouped[displayDate].income += Number(transaction.amount);
+      } else if (transaction.type === "expense") {
+        grouped[displayDate].expense += Number(transaction.amount);
+      }
+    });
+
+    return Object.values(grouped);
   }, [transactions, selectedPeriod]);
 
   return (
@@ -109,7 +130,7 @@ export default function MonthlyOverview() {
               tickLine={false}
               axisLine={false}
               padding={{ left: 35, right: 35 }}
-              tickMargin={10}
+              tickMargin={11}
             />
 
             <YAxis
@@ -117,6 +138,7 @@ export default function MonthlyOverview() {
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => `${value / 1000}k`}
+              
             />
 
             <Tooltip
@@ -130,7 +152,7 @@ export default function MonthlyOverview() {
               }}
             />
             <Line
-              type="monotoneX" // <-- Changed from "natural"
+              type="monotoneX" 
               dataKey="income"
               stroke="#10b981"
               strokeWidth={3}
@@ -147,7 +169,7 @@ export default function MonthlyOverview() {
             />
 
             <Line
-              type="monotoneX" // <-- Changed from "natural"
+              type="monotoneX" 
               dataKey="expense"
               stroke="#f43f5e"
               strokeWidth={3}
