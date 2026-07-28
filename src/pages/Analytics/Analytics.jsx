@@ -9,6 +9,7 @@ import {
   BadgeIndianRupee,
 } from "lucide-react";
 
+import { useState } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useBudgets } from "@/context/BudgetsContext";
 import SummaryCard from "@/components/analytics/SummaryCard";
@@ -36,34 +37,65 @@ import { useNavigate } from "react-router-dom";
 import HealthScoreCard from "@/components/analytics/HealthScoreCard";
 
 export default function Analytics() {
+const navigate = useNavigate();
+const [timeFilter, setTimeFilter] = useState("1m");
 
 const { budgets } = useBudgets();
 const { transactions } = useTransactions();
-const navigate = useNavigate();
-const totalIncome = getTotalIncome(transactions);
-const totalExpense = getTotalExpense(transactions);
-const netSavings = getNetSavings(transactions);
-const savingsRate = getSavingsRate(transactions);
-const chartData = getIncomeExpenseData(transactions);
+const filteredTransactions = transactions.filter((transaction) => {
+  if (!transaction.date) return true;
+
+  const transactionDate = new Date(transaction.date);
+  const now = new Date();
+
+  switch (timeFilter) {
+    case "1m":
+      return (
+        transactionDate.getMonth() === now.getMonth() &&
+        transactionDate.getFullYear() === now.getFullYear()
+      );
+
+    case "3m": {
+      const limit = new Date();
+      limit.setMonth(limit.getMonth() - 3);
+      return transactionDate >= limit;
+    }
+
+    case "6m": {
+      const limit = new Date();
+      limit.setMonth(limit.getMonth() - 6);
+      return transactionDate >= limit;
+    }
+
+    default:
+      return true;
+  }
+});
+
+const totalIncome = getTotalIncome(filteredTransactions);
+const totalExpense = getTotalExpense(filteredTransactions);
+const netSavings = getNetSavings(filteredTransactions);
+const savingsRate = getSavingsRate(filteredTransactions);
+const chartData =
+  getIncomeExpenseData(filteredTransactions);
 const categoryChartData =
-  getCategoryExpenseData(transactions);
-
-const monthlyData = getMonthlyExpenseData(transactions);
+  getCategoryExpenseData(filteredTransactions);
+console.log("Filtered:", filteredTransactions.length);
+console.log("Category Chart:", categoryChartData);  
+const monthlyData =
+  getMonthlyExpenseData(filteredTransactions);
 const transactionCount =
-  getTransactionCount(transactions);
-
+  getTransactionCount(filteredTransactions);
 const largestExpense =
-  getLargestExpense(transactions);
-
+  getLargestExpense(filteredTransactions);
 const averageExpense =
-  getAverageExpense(transactions);
-
+  getAverageExpense(filteredTransactions);
 const topCategory =
-  getTopCategory(transactions);
-
-const healthScore = getFinancialHealthScore(
-  transactions,
-  budgets
+  getTopCategory(filteredTransactions);
+const healthScore =
+  getFinancialHealthScore(
+    filteredTransactions,
+    budgets
 );
 
 const healthStatus =
@@ -126,10 +158,14 @@ const healthStatus =
         data={chartData}
         totalIncome={totalIncome}
         totalExpense={totalExpense}
+        timeFilter={timeFilter}
+        setTimeFilter={setTimeFilter}
       />
 
       <CategoryPieChart
         data={categoryChartData}
+        timeFilter={timeFilter}
+        setTimeFilter={setTimeFilter}
       />
     </div>
     <div className="mt-6">

@@ -2,7 +2,7 @@ export const recentTransactions = [
   {
     id: 1,
     title: "McDonald's",
-    category: "Food",
+    category: "food",
     type: "expense",
     amount: 450,
     date: new Date().toISOString(),
@@ -10,7 +10,7 @@ export const recentTransactions = [
   {
     id: 2,
     title: "Uber",
-    category: "Travel",
+    category: "travel",
     type: "expense",
     amount: 320,
     date: new Date(Date.now() - 86400000).toISOString(),
@@ -18,7 +18,7 @@ export const recentTransactions = [
   {
     id: 3,
     title: "Salary",
-    category: "Income",
+    category: "income",
     type: "income",
     amount: 80000,
     date: "2026-07-23T10:00:00.000Z",
@@ -26,7 +26,7 @@ export const recentTransactions = [
   {
     id: 4,
     title: "Electricity Bill",
-    category: "Bills",
+    category: "bills",
     type: "expense",
     amount: 1850,
     date: "2026-07-22T18:00:00.000Z",
@@ -34,7 +34,7 @@ export const recentTransactions = [
   {
     id: 5,
     title: "Amazon",
-    category: "Shopping",
+    category: "shopping",
     type: "expense",
     amount: 2400,
     date: "2026-07-20T12:00:00.000Z",

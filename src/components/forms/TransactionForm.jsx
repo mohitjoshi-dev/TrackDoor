@@ -10,70 +10,91 @@ import {
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { categoryData } from "@/constants/categoryData";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+
+import { format } from "date-fns";
 
 export default function TransactionForm({ onCancel, onSubmit, initialData, mode = "add", }) {
-const [formData, setFormData] = useState(
-        initialData || {
-        title: "",
-        amount: "",
-        category: "",
-        type: "expense",
-        notes: "",
+  const [formData, setFormData] = useState(
+    initialData || {
+      title: "",
+      amount: "",
+      category: "",
+      type: "expense",
+      notes: "",
+      date: new Date()
+    }
+  );
+
+  // Moved errors state UP so handleChange can safely reference it
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        ...initialData,
+        date: initialData.date
+          ? new Date(initialData.date)
+          : new Date(),
       });
+    }
+  }, [initialData]);     
+    
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-useEffect(() => {
-  if (initialData) {
-    setFormData(initialData);
-  }
-}, [initialData]);      
-  
-const handleChange = (e) => {
-  const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-  setFormData((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
 
-  setErrors((prev) => ({
-    ...prev,
-    [name]: "",
-  }));
-};
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-const [errors, setErrors] = useState({});
+    const newErrors = {};
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+    if (!formData.title.trim()) {
+      newErrors.title = "Transaction name is required.";
+    }
 
-  const newErrors = {};
+    if (!formData.amount || Number(formData.amount) <= 0) {
+      newErrors.amount = "Amount must be greater than 0.";
+    }
 
-  if (!formData.title.trim()) {
-    newErrors.title = "Transaction name is required.";
-  }
+    if (!formData.category) {
+      newErrors.category = "Please select a category.";
+    }
 
-  if (!formData.amount || Number(formData.amount) <= 0) {
-    newErrors.amount = "Amount must be greater than 0.";
-  }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-  if (!formData.category) {
-    newErrors.category = "Please select a category.";
-  }
+    setErrors({});
 
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  }
+    onSubmit({
+      ...formData,
+      amount: Number(formData.amount),
+      // Added a fallback to prevent the toISOString undefined crash
+      date: (formData.date || new Date()).toISOString(),
+    });
+  };
 
-  setErrors({});
-
-onSubmit({
-  ...formData,
-  amount: Number(formData.amount),
-  });
-};
-
-    return (
+  return (
     <form onSubmit={handleSubmit} className="space-y-5">  
       
       {/* Transaction Name */}
@@ -111,22 +132,60 @@ onSubmit({
         )}
       </div>
 
+      {/*Date Edit*/}
+      <div className="space-y-2">
+        <Label>Date</Label>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full justify-start text-left font-normal"
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+
+              {formData.date ? (
+                format(formData.date, "dd MMM yyyy")
+              ) : (
+                <span>Select date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={formData.date}
+              onSelect={(date) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  date,
+                }))
+              }
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      {/*Category */}
       <div className="space-y-2">
         <Label>Category</Label>
 
         <Select
           value={formData.category}
           onValueChange={(value) => {
-          setFormData((prev) => ({
-            ...prev,
-            category: value,
-          }));
+            setFormData((prev) => ({
+              ...prev,
+              category: value,
+            }));
 
-          setErrors((prev) => ({
-            ...prev,
-            category: "",
-          }));
-        }}
+            setErrors((prev) => ({
+              ...prev,
+              category: "",
+            }));
+          }}
         >
           
           <SelectTrigger>
@@ -161,11 +220,11 @@ onSubmit({
           </SelectContent>
         </Select>
       
-      {errors.category && (
+        {errors.category && (
           <p className="text-sm text-red-500 mt-1">
             {errors.category}
           </p>
-          )}
+        )}
 
       </div>
       <div className="space-y-2">

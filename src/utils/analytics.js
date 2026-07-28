@@ -195,8 +195,8 @@ export const getFinancialHealthScore = (
 
   // 20 points: Income greater than expenses
   if (
-    getTotalIncome(transactions) >
-    getTotalExpense(transactions)
+  getTotalIncome(transactions) >
+  getTotalExpense(transactions)
   ) {
     score += 20;
   }

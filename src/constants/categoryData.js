@@ -9,6 +9,7 @@ import {
   GraduationCap,
   Package,
   IndianRupee,
+  Dumbbell,
 } from "lucide-react";
 
 export const categoryData = [
@@ -65,6 +66,12 @@ export const categoryData = [
     name: "Other",
     icon: Package,
     color: "#64748b",
+  },
+  {
+  id: "gym",
+  name: "Gym",
+  icon: Dumbbell,
+  color: "#f97316",
   },
   {
     id: "income",

@@ -158,7 +158,7 @@ export default function Transactions() {
                     deleteTransaction(id);
                     toast.success("Transaction deleted successfully!");
                   }}
-                  onClick={() => {
+                  onEdit={() => {
                     setSelectedTransaction(transaction);
                     setEditOpen(true);
                   }}
@@ -208,6 +208,7 @@ export default function Transactions() {
 
           <div className="px-6 py-5">
             <TransactionForm
+              mode="edit"
               initialData={selectedTransaction}
               onCancel={() => setEditOpen(false)}
               onSubmit={(data) => {
