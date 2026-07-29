@@ -26,14 +26,13 @@ export function TransactionsProvider({ children }) {
 
   // Add Transaction
   const addTransaction = (transaction) => {
-  setTransactions((prev) => [
-    {
-      id: Date.now(),
-      date: new Date().toISOString(),
-      ...transaction,
-    },
-    ...prev,
-  ]);
+    setTransactions((prev) => [
+      {
+        id: Date.now(),
+        ...transaction,
+      },
+      ...prev,
+    ]);
   };
 
   // Update Transaction

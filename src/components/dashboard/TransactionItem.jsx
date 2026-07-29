@@ -7,47 +7,13 @@ import {
   HeartPulse,
   Film,
   CircleDollarSign,
+  Dumbbell,
   Trash2,
-  Pencil, // <-- Added Pencil import
+  Pencil,
 } from "lucide-react";
 
-const categoryStyles = {
-  Food: {
-    icon: UtensilsCrossed,
-    bg: "bg-emerald-500/10",
-    color: "text-emerald-500",
-  },
-  Travel: {
-    icon: Car,
-    bg: "bg-sky-500/10",
-    color: "text-sky-500",
-  },
-  Shopping: {
-    icon: ShoppingBag,
-    bg: "bg-violet-500/10",
-    color: "text-violet-500",
-  },
-  Income: {
-    icon: Wallet,
-    bg: "bg-green-500/10",
-    color: "text-green-500",
-  },
-  Bills: {
-    icon: Receipt,
-    bg: "bg-amber-500/10",
-    color: "text-amber-500",
-  },
-  Health: {
-    icon: HeartPulse,
-    bg: "bg-rose-500/10",
-    color: "text-rose-500",
-  },
-  Entertainment: {
-    icon: Film,
-    bg: "bg-pink-500/10",
-    color: "text-pink-500",
-  },
-};
+import { categoryData } from "@/constants/categoryData";
+
 
 export default function TransactionItem({ transaction, onDelete, onEdit }) {
   const { title, category, amount, date, type } = transaction;
@@ -55,13 +21,10 @@ export default function TransactionItem({ transaction, onDelete, onEdit }) {
   const formattedCategory =
     category.charAt(0).toUpperCase() + category.slice(1);
 
-  const style = categoryStyles[formattedCategory] || {
-    icon: CircleDollarSign,
-    bg: "bg-primary/10",
-    color: "text-primary",
-  };
+  const categoryInfo =
+  categoryData.find((c) => c.id === category) || {};
 
-  const Icon = style.icon;
+  const Icon = categoryInfo.icon || CircleDollarSign;
 
   const isIncome = type === "income";
   const formatDate = (dateString) => {
@@ -105,8 +68,12 @@ export default function TransactionItem({ transaction, onDelete, onEdit }) {
       {/* Left */}
       <div className="flex items-center gap-4">
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-xl ${style.bg} ${style.color} transition-all duration-300 group-hover:scale-105`}
-        >
+        className="flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105"
+        style={{
+          backgroundColor: `${categoryInfo.color}20`,
+          color: categoryInfo.color,
+        }}
+      >
           <Icon size={22} />
         </div>
 

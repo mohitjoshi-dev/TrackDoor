@@ -93,6 +93,16 @@ export default function IncomeExpenseChart({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (savingsRate / 100) * circumference;
 
+  const maxValue = Math.max(...data.map((item) => item.amount));
+
+  const roundedMax =
+    Math.ceil(maxValue / 20000) * 20000;
+
+  const yAxisTicks = Array.from(
+    { length: 6 },
+    (_, i) => Math.round((roundedMax / 5) * i)
+  );
+
   return (
     <div className="group relative w-full overflow-hidden rounded-[24px] border border-slate-700/40 bg-[#0B1121] p-6 lg:p-8 shadow-2xl transition-all duration-500 hover:border-blue-500/30 flex flex-col h-full">
       {/* Premium Background Glows */}
@@ -150,7 +160,7 @@ export default function IncomeExpenseChart({
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={data}
-              margin={{ top: 20, right: 0, left: -20, bottom: 0 }}
+              margin={{ top: 35, right: 10, left: -10, bottom: 0 }} 
             >
               <defs>
                 <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
@@ -188,9 +198,11 @@ export default function IncomeExpenseChart({
                 tick={{ fill: "#94A3B8", fontSize: 13 }}
                 axisLine={false}
                 tickLine={false}
-                tickFormatter={(val) => (val === 0 ? "0" : `${val / 1000}K`)}
-                domain={[0, 100000]}
-                ticks={[0, 20000, 40000, 60000, 80000, 100000]}
+                tickFormatter={(val) =>
+                  val === 0 ? "0" : `${Math.round(val / 1000)}K`
+                }
+                domain={[0, roundedMax]}
+                ticks={yAxisTicks}
               />
 
               <Tooltip

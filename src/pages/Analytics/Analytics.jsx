@@ -83,7 +83,7 @@ const categoryChartData =
 console.log("Filtered:", filteredTransactions.length);
 console.log("Category Chart:", categoryChartData);  
 const monthlyData =
-  getMonthlyExpenseData(filteredTransactions);
+  getMonthlyExpenseData(transactions);
 const transactionCount =
   getTransactionCount(filteredTransactions);
 const largestExpense =

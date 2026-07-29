@@ -77,10 +77,28 @@ export const getCategoryExpenseData = (transactions = []) => {
   }));
 };
 
-// Monthly Expense Trend
+// Monthly Expense Trend (Last 12 Months)
 export const getMonthlyExpenseData = (transactions = []) => {
-  const monthlyTotals = {};
+  const today = new Date();
+  const months = [];
 
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(
+      today.getFullYear(),
+      today.getMonth() - i,
+      1
+    );
+
+    months.push({
+      key: `${date.getFullYear()}-${date.getMonth()}`,
+      month: date.toLocaleString("default", {
+        month: "short",
+      }),
+      amount: 0,
+    });
+  }
+
+  // Add expenses into the correct month
   transactions.forEach((transaction) => {
     if (transaction.type?.toLowerCase() !== "expense") return;
 
@@ -88,16 +106,18 @@ export const getMonthlyExpenseData = (transactions = []) => {
 
     if (isNaN(date.getTime())) return;
 
-    const month = date.toLocaleString("default", {
-      month: "short",
-    });
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
 
-    monthlyTotals[month] =
-      (monthlyTotals[month] || 0) +
-      Number(transaction.amount || 0);
+    const targetMonth = months.find(
+      (month) => month.key === key
+    );
+
+    if (targetMonth) {
+      targetMonth.amount += Number(transaction.amount || 0);
+    }
   });
 
-  return Object.entries(monthlyTotals).map(([month, amount]) => ({
+  return months.map(({ month, amount }) => ({
     month,
     amount,
   }));

@@ -1,6 +1,6 @@
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, LayoutGrid } from "lucide-react";
 import TransactionItem from "@/components/dashboard/TransactionItem";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 
 import {
@@ -21,12 +21,19 @@ export default function Transactions() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");  
   const [editOpen, setEditOpen] = useState(false);
+  const scrollRef = useRef(null);
+
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   
   // Using the global context instead of local state!
   const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
 
-  const filteredTransactions = [...transactions].filter((transaction) => {
+  const filteredTransactions = [...transactions]
+  .filter((transaction) => {
     const matchesSearch =
       transaction.title
         ?.toLowerCase()
@@ -40,7 +47,12 @@ export default function Transactions() {
       transaction.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
-  });
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.date).getTime() -
+      new Date(a.date).getTime()
+  );
 
   return (
     <div className="space-y-6">
@@ -80,20 +92,56 @@ export default function Transactions() {
           </div>
  
         {/* Category Chips */}
-        <div className="mt-5 flex gap-3 overflow-x-auto pb-2 scrollbar-hide scroll-smooth">
-          {[{ id: "all", name: "All" }, ...categoryData].map((category) => (
+        <div
+          ref={scrollRef}
+          className="mt-5 flex gap-3 overflow-x-auto pb-1 no-scrollbar cursor-grab active:cursor-grabbing select-none snap-x"
+          onMouseDown={(e) => {
+            isDown.current = true;
+            startX.current = e.pageX - scrollRef.current.offsetLeft;
+            scrollLeft.current = scrollRef.current.scrollLeft;
+          }}
+          onMouseLeave={() => {
+            isDown.current = false;
+          }}
+          onMouseUp={() => {
+            isDown.current = false;
+          }}
+          onMouseMove={(e) => {
+            if (!isDown.current) return;
+            e.preventDefault();
+
+            const x = e.pageX - scrollRef.current.offsetLeft;
+            const walk = (x - startX.current) * 1.5;
+
+            scrollRef.current.scrollLeft =
+              scrollLeft.current - walk;
+          }}
+        >
+          {[
+            {
+              id: "all",
+              name: "All",
+              icon: LayoutGrid,
+            },
+            ...categoryData,
+          ].map((category) => {
+            const Icon = category.icon;
+
+            return (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-              selectedCategory === category.id
+              className={`snap-start flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                selectedCategory === category.id
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary hover:bg-secondary/70"
               }`}
             >
-              {category.name}
+              <Icon size={16} />
+              <span>{category.name}</span>
             </button>
-          ))}
+         );
+        })}
         </div>
       </div>
 

@@ -233,3 +233,14 @@
 .animate-ambient-glow {
   animation: ambientGlow 10s ease-in-out infinite;
 }
+
+
+/*Scrollbar for Transaction Chipsss */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
