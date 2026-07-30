@@ -30,7 +30,7 @@ const overview = [
   {
     title: "Total Income",
     value: `₹${totalIncome.toLocaleString("en-IN")}`,
-    trend: "+12.5%",
+    trend: "▲ +12.5%",
     trendText: " vs last month",
     trendColor: "text-emerald-500",
     icon: ArrowDownCircle,
@@ -40,7 +40,7 @@ const overview = [
   {
     title: "Total Expenses",
     value: `₹${totalExpense.toLocaleString("en-IN")}`,
-    trend: "+8.2%",
+    trend: "▼ +8.2%",
     trendText: " vs last month",
     trendColor: "text-rose-500",
     icon: ArrowUpCircle,
@@ -50,7 +50,7 @@ const overview = [
   {
     title: "Net Savings",
     value: `₹${netSavings.toLocaleString("en-IN")}`,
-    trend: "+18.7%",
+    trend: "▲ +18.7%",
     trendText: " vs last month",
     trendColor: "text-emerald-500",
     icon: Wallet,
@@ -60,7 +60,7 @@ const overview = [
   {
     title: "Savings Rate",
     value: `${savingsRate}%`,
-    trend: "+4.3%",
+    trend: "▲ +4.3%",
     trendText: " vs last month",
     trendColor: "text-emerald-500",
     icon: PiggyBank,
@@ -75,7 +75,7 @@ const overview = [
     <div className="mb-6 flex items-start justify-between">
     <div>
         <h2 className="text-xl font-bold">Financial Overview</h2>
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
         Your financial health at a glance.
         </p>
     </div>
@@ -85,14 +85,14 @@ const overview = [
     </div>
     </div>
 
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-5 sm:grid-cols-2">
   {overview.map((item) => {
     const Icon = item.icon;
 
     return (
       <div
         key={item.title}
-        className="group rounded-2xl border border-border bg-linear-to-br from-background to-background/70 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl "
+        className="group rounded-2xl border border-border bg-linear-to-br from-background to-background/70 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl "
       >
         <div className="flex items-start justify-between">
             <div>
@@ -111,7 +111,7 @@ const overview = [
             </div>
             
             <div
-            className={`flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${item.iconBg}`}
+            className={`flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 ${item.iconBg}`}
             >
             <Icon className={`h-6 w-6 ${item.iconColor}`} />
             </div>
