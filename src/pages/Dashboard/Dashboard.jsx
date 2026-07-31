@@ -1,8 +1,8 @@
-import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
-import StatsCard from "@/components/dashboard/StatsCard";
-import MonthlyOverview from "@/components/dashboard/MonthlyOverview";
-import CategoryBreakdown from "@/components/dashboard/CategoryBreakdown";
-import RecentTransaction from "@/components/dashboard/RecentTransaction";
+import WelcomeBanner from "@/pages/Dashboard/components/WelcomeBanner";
+import StatsCard from "@/pages/Dashboard/components/StatsCard";
+import MonthlyOverview from "@/pages/Dashboard/components/MonthlyOverview";
+import CategoryBreakdown from "@/pages/Dashboard/components/CategoryBreakdown";
+import RecentTransaction from "@/pages/Dashboard/components/RecentTransaction";
 import { Plus } from "lucide-react";
 import { useMemo } from "react";
 import { useTransactions } from "@/context/TransactionsContext";

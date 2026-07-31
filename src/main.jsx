@@ -6,17 +6,20 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { TransactionsProvider } from "@/context/TransactionsContext";
 import { Toaster } from "sonner";
 import { BudgetsProvider } from "@/context/BudgetsContext";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
   <BudgetsProvider>  
     <TransactionsProvider>
-      <ThemeProvider>
+      <SettingsProvider>
+        <ThemeProvider>
         <>
           <App />
           <Toaster richColors position="top-right" />
-        </>
-      </ThemeProvider>
+        </>        
+        </ThemeProvider>
+      </SettingsProvider>  
     </TransactionsProvider>
   </BudgetsProvider>  
   </StrictMode>

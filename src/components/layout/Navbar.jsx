@@ -9,7 +9,7 @@ import {
   ChevronDown,
   Check,
   Circle,
-  RefreshCw, // <-- Added this import
+  RefreshCw,
 } from "lucide-react";
 
 import {
@@ -21,22 +21,15 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-import { useTheme } from "@/context/ThemeContext";
+import { useSettings } from "@/context/SettingsContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Navbar() {
-  const { theme, setLight, setMidnight, setAmoled } = useTheme();
-  const isLight = theme === "light";
+  const { settings, updateSetting } = useSettings();
 
   return (
-    <header
-      className={`sticky top-0 z-40 flex h-20 items-center justify-between px-8 backdrop-blur-xl transition-all duration-300 ${
-        isLight
-          ? "border-b border-slate-200/60 bg-white/45 shadow-lg shadow-slate-200/40 supports-backdrop-filter:bg-white/35"
-          : "border-b border-white/10 bg-slate-950/70"
-      }`}
-    >
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-border bg-background/80 px-8 backdrop-blur-xl transition-all duration-300 supports-backdrop-filter:bg-background/60 shadow-sm">
       {/* Left */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -51,7 +44,7 @@ export default function Navbar() {
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search transactions..."
-            className="h-11 w-80 rounded-xl border-border bg-white/55 backdrop-blur-md pl-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
+            className="h-11 w-80 rounded-xl border-border bg-secondary/50 backdrop-blur-md pl-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
           />
         </div>
 
@@ -97,19 +90,25 @@ export default function Navbar() {
             <DropdownMenuLabel>Choose Theme</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border" />
 
-            <DropdownMenuItem onClick={setMidnight} className="flex justify-between hover:bg-secondary cursor-pointer">
+            <DropdownMenuItem 
+            onClick={() => updateSetting("theme", "midnight")} 
+            className="flex justify-between hover:bg-secondary cursor-pointer">
               <span className="flex items-center gap-2"><Moon className="h-4 w-4" />Midnight</span>
-              {theme === "midnight" && <Check className="h-4 w-4 text-primary" />}
+              {settings.theme === "midnight" && <Check className="h-4 w-4 text-primary" />}
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={setLight} className="flex justify-between hover:bg-secondary cursor-pointer">
+            <DropdownMenuItem 
+            onClick={() => updateSetting("theme", "light")} 
+            className="flex justify-between hover:bg-secondary cursor-pointer">
               <span className="flex items-center gap-2"><Sun className="h-4 w-4" />Light</span>
-              {theme === "light" && <Check className="h-4 w-4 text-primary" />}
+              {settings.theme === "light" && <Check className="h-4 w-4 text-primary" />}
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={setAmoled} className="flex justify-between hover:bg-secondary cursor-pointer">
+            <DropdownMenuItem 
+            onClick={() => updateSetting("theme", "amoled")}
+            className="flex justify-between hover:bg-secondary cursor-pointer">
               <span className="flex items-center gap-2"><Circle className="h-4 w-4 fill-current" />AMOLED</span>
-              {theme === "amoled" && <Check className="h-4 w-4 text-primary" />}
+              {settings.theme === "amoled" && <Check className="h-4 w-4 text-primary" />}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

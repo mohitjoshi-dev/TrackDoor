@@ -1,4 +1,4 @@
-import ProfileCardWrapper from "@/components/profile/ProfileCardWrapper";
+import CardWrapper from "@/components/common/CardWrapper";
 import SettingsItem from "./SettingsItem";
 import { Download, Upload, Trash2 } from "lucide-react";
 
@@ -32,7 +32,7 @@ const data = [
 
 
   return (
-    <ProfileCardWrapper>
+    <CardWrapper>
         <div className="mb-6">
         <h2 className="text-xl font-bold">
             Data
@@ -51,6 +51,6 @@ const data = [
             />
         ))}
         </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
   );
 }

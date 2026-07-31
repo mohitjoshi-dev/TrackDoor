@@ -1,5 +1,5 @@
 import { Plus, Search, LayoutGrid } from "lucide-react";
-import TransactionItem from "@/components/dashboard/TransactionItem";
+import TransactionItem from "@/pages/Transactions/components/TransactionItem";
 import { useState, useRef } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 
@@ -11,7 +11,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-import TransactionForm from "@/components/forms/TransactionForm";
+import TransactionForm from "@/pages/Transactions/components/TransactionForm";
 import { toast } from "sonner";
 import { categoryData } from "@/constants/categoryData";
 import { Button } from "@/components/ui/button";

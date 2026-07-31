@@ -5,7 +5,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-import ProfileCardWrapper from "./ProfileCardWrapper";
+import CardWrapper from "../../../components/common/CardWrapper";
 
 
 export default function DataManagementCard() {
@@ -35,7 +35,7 @@ export default function DataManagementCard() {
   ];    
 
   return (
-    <ProfileCardWrapper>
+    <CardWrapper>
       <div className="mb-6">
         <h2 className="text-xl font-bold">
           Data Management
@@ -82,6 +82,6 @@ export default function DataManagementCard() {
           );
         })}
       </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
   );
 }

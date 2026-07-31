@@ -1,6 +1,6 @@
 import { ReceiptText, TrendingUp, Banknote, Trophy, BarChart2 } from "lucide-react";
 import { useTransactions } from "@/context/TransactionsContext";
-import ProfileCardWrapper from "./ProfileCardWrapper";
+import CardWrapper from "../../../components/common/CardWrapper";
 
 export default function StatisticsCard() {
   const { transactions } = useTransactions();
@@ -55,7 +55,7 @@ export default function StatisticsCard() {
   ];    
 
   return (
-    <ProfileCardWrapper>
+    <CardWrapper>
       <div className="flex h-full min-h-100 flex-col">
         {/* Header */}
         <div className="mb-6 flex shrink-0 items-center justify-between">
@@ -91,6 +91,6 @@ export default function StatisticsCard() {
           })}
         </div>
       </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
   );
 }

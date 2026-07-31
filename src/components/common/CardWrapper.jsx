@@ -1,4 +1,4 @@
-export default function ProfileCardWrapper({
+export default function CardWrapper({
   children,
   className = "",
   topGlow = "bg-primary/10",

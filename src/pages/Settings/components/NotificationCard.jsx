@@ -1,4 +1,4 @@
-import ProfileCardWrapper from "@/components/profile/ProfileCardWrapper";
+import CardWrapper from "@/components/common/CardWrapper";
 import SettingsToggle from "./SettingsToggle";
 
 import {
@@ -54,7 +54,7 @@ const notifications = [
 ];
 
 return (
-    <ProfileCardWrapper>
+    <CardWrapper>
     <div className="mb-6">
     <h2 className="text-xl font-bold">
         Notifications
@@ -73,7 +73,7 @@ return (
         />
     ))}
     </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
 );
 
 }

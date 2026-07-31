@@ -5,7 +5,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 
-import ProfileCardWrapper from "./ProfileCardWrapper";
+import CardWrapper from "../../../components/common/CardWrapper";
 import { ChevronRight } from "lucide-react";
 
 export default function PreferenceCard() {
@@ -46,7 +46,7 @@ export default function PreferenceCard() {
 ];
    
 return (
-  <ProfileCardWrapper>
+  <CardWrapper>
         <div className="mb-6">
         <h2 className="text-xl font-bold">
             App Preferences
@@ -92,6 +92,6 @@ return (
         );
     })}       
         </div>
-  </ProfileCardWrapper>
+  </CardWrapper>
  );
 }

@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useBudgets } from "@/context/BudgetsContext";
-import SummaryCard from "@/components/analytics/SummaryCard";
+import SummaryCard from "@/components/charts/SummaryCard";
 import {
   getTotalIncome,
   getTotalExpense,
@@ -29,12 +29,12 @@ import {
   getHealthStatus,
 } from "@/utils/analytics";
 
-import IncomeExpenseChart from "@/components/analytics/IncomeExpenseChart";
-import CategoryPieChart from "@/components/analytics/CategoryPieChart";
-import MonthlyTrendChart from "@/components/analytics/MonthlyTrendChart";
-import InsightCard from "@/components/analytics/InsightCard";
+import IncomeExpenseChart from "@/components/charts/IncomeExpenseChart";
+import CategoryPieChart from "@/components/charts/CategoryPieChart";
+import MonthlyTrendChart from "@/components/charts/MonthlyTrendChart";
+import InsightCard from "@/components/charts/InsightCard";
 import { useNavigate } from "react-router-dom";
-import HealthScoreCard from "@/components/analytics/HealthScoreCard";
+import HealthScoreCard from "@/components/charts/HealthScoreCard";
 
 export default function Analytics() {
 const navigate = useNavigate();

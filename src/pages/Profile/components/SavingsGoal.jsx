@@ -1,5 +1,5 @@
 import { Target, Sparkles } from "lucide-react";
-import ProfileCardWrapper from "./ProfileCardWrapper";
+import CardWrapper from "../../../components/common/CardWrapper";
 import { useTransactions } from "@/context/TransactionsContext";
 
 export default function SavingsGoal() {
@@ -20,7 +20,7 @@ export default function SavingsGoal() {
   const dailyTarget = daysLeft > 0 ? Math.ceil(remaining / daysLeft) : remaining;
 
   return (
-    <ProfileCardWrapper>
+    <CardWrapper>
       <div className="flex h-full min-h-85 flex-col">
         
         {/* Header */}
@@ -87,6 +87,6 @@ export default function SavingsGoal() {
 
         </div>
       </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
   );
 }

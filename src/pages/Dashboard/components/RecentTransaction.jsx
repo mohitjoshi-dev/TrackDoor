@@ -1,5 +1,5 @@
 import { useTransactions } from "@/context/TransactionsContext";
-import TransactionItem from "./TransactionItem";
+import TransactionItem from "../../Transactions/components/TransactionItem";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 

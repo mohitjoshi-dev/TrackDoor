@@ -1,4 +1,4 @@
-import ProfileCardWrapper from "@/components/profile/ProfileCardWrapper";
+import CardWrapper from "@/components/common/CardWrapper";
 import SettingsItem from "./SettingsItem";
 
 import {
@@ -53,7 +53,7 @@ export default function PreferencesCard() {
   },
 ];
   return (
-  <ProfileCardWrapper>
+  <CardWrapper>
     <div className="mb-6">
       <h2 className="text-xl font-bold">
         Preferences
@@ -72,6 +72,6 @@ export default function PreferencesCard() {
         />
       ))}
     </div>
-  </ProfileCardWrapper>
+  </CardWrapper>
 );
 }

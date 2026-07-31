@@ -6,6 +6,7 @@
 @custom-variant dark (&:is(.midnight *, .amoled *));
 
 @theme inline {
+    --spacing: calc(0.25rem * var(--spacing-scale));
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
@@ -243,4 +244,82 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/*Accent theme*/
+.accent-blue {
+  --primary: oklch(0.62 0.20 255);
+}
+
+.accent-violet {
+  --primary: oklch(0.62 0.22 300);
+}
+
+.accent-emerald {
+  --primary: oklch(0.70 0.18 160);
+}
+
+.accent-orange {
+  --primary: oklch(0.72 0.18 60);
+}
+
+.accent-rose {
+  --primary: oklch(0.68 0.20 15);
+}
+
+.accent-slate {
+  --primary: oklch(0.55 0.03 250);
+}
+
+
+/*Animations*/
+.no-animations * {
+  /* Set duration and delay to 0s instead of 'none' so events still fire */
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+.no-animations {
+  scroll-behavior: auto;
+}
+
+/* Font Size */
+:root {
+  --app-font-size: 16px;
+}
+
+.font-small {
+  --app-font-size: 14px;
+}
+
+.font-medium {
+  --app-font-size: 16px;
+}
+
+.font-large {
+  --app-font-size: 18px;
+}
+
+html {
+  font-size: var(--app-font-size);
+}
+
+
+/* Display Density */
+:root {
+  --spacing-scale: 1; 
+}
+
+.density-compact {
+  --spacing-scale: 0.80;
+}
+
+.density-comfortable {
+  --spacing-scale: 1;
+}
+
+.density-spacious {
+  --spacing-scale: 1.20;
 }

@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 import { useTransactions } from "@/context/TransactionsContext";
-import ProfileCardWrapper from "./ProfileCardWrapper";
+import CardWrapper from "../../../components/common/CardWrapper";
 
 export default function FinancialOverview() {
 
@@ -70,7 +70,7 @@ const overview = [
 ];
 
   return (
-   <ProfileCardWrapper>
+   <CardWrapper>
 
     <div className="mb-6 flex items-start justify-between">
     <div>
@@ -120,6 +120,6 @@ const overview = [
         );
         })}
       </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
   ); 
 }

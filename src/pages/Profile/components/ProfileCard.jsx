@@ -6,11 +6,11 @@ import {
   Quote,
 } from "lucide-react";
 
-import ProfileCardWrapper from "./ProfileCardWrapper";
+import CardWrapper from "../../../components/common/CardWrapper";
 
 export default function ProfileCard() {
   return (
-    <ProfileCardWrapper className="p-8">
+    <CardWrapper className="p-8">
       <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-blue-500/10 blur-[80px] pointer-events-none" />
       <div className="absolute -left-20 bottom-0 h-44 w-44 rounded-full bg-violet-500/10 blur-[80px] pointer-events-none" />
 
@@ -75,6 +75,6 @@ export default function ProfileCard() {
           </div>
         </div>
       </div>
-    </ProfileCardWrapper>
+    </CardWrapper>
   );
 }

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useBudgets } from "@/context/BudgetsContext";
-import BudgetCard from "@/components/budgets/BudgetCard";
-import BudgetSummary from "@/components/budgets/BudgetSummary";
-import BudgetForm from "@/components/budgets/BudgetForm";
-import DeleteBudgetDialog from "@/components/budgets/DeleteBudgetDialog";
-import { Button } from "@/components/ui/button";
+import BudgetCard from "./components/BudgetCard";
+import BudgetSummary from "./components/BudgetSummary";
+import BudgetForm from "./components/BudgetForm";
+import DeleteBudgetDialog from "./dialog/DeleteBudgetDialog";import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 

@@ -1,9 +1,14 @@
-import AppearanceCard from "@/components/settings/AppearanceCard";
-import PreferencesCard from "@/components/settings/PreferencesCard";
-import AccountCard from "@/components/settings/AccountCard";
-import DataCard from "@/components/settings/DataCard";
+import AppearanceCard from "@/pages/Settings/components/AppearanceCard";
+import PreferencesCard from "@/pages/Settings/components/PreferencesCard";
+import AccountCard from "@/pages/Settings/components/AccountCard";
+import DataCard from "@/pages/Settings/components/DataCard";
+import { useSettings } from "@/context/SettingsContext";
 
 export default function Settings() {
+const { settings } = useSettings();
+
+console.log(settings);
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
