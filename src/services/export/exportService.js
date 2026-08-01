@@ -44,7 +44,7 @@ export function downloadJSON(data) {
   URL.revokeObjectURL(url);
 
   localStorage.setItem(
-    "lastExport",
+    "lastBackup",
     new Date().toISOString()
   );
 }
@@ -106,7 +106,7 @@ export function downloadCSV(data) {
   URL.revokeObjectURL(url);
 
   localStorage.setItem(
-    "lastExport",
+    "lastBackup",
     new Date().toISOString()
   );
 }
