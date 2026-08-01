@@ -70,14 +70,11 @@ const RenderLabel = (props) => {
 };
 
 export default function IncomeExpenseChart({
-  data = [
-    { name: "Income", amount: 80000 },
-    { name: "Expense", amount: 14767 },
-  ],
-  totalIncome = 80000,
-  totalExpense = 14767,
-  highestExpenseCategory = "Shopping",
-  highestExpenseAmount = 5620,
+  data = [],
+  totalIncome = 0,
+  totalExpense = 0,
+  highestExpenseCategory,
+  highestExpenseAmount,
   timeFilter,
   setTimeFilter,
 }) {
@@ -93,10 +90,14 @@ export default function IncomeExpenseChart({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (savingsRate / 100) * circumference;
 
-  const maxValue = Math.max(...data.map((item) => item.amount));
+  const maxValue = data.length > 0
+                    ? Math.max(...data.map((item) => item.amount))
+                    : 0;
 
   const roundedMax =
-    Math.ceil(maxValue / 20000) * 20000;
+    maxValue > 0
+    ? Math.ceil(maxValue / 20000) * 20000
+    : 20000;
 
   const yAxisTicks = Array.from(
     { length: 6 },
@@ -319,10 +320,13 @@ export default function IncomeExpenseChart({
                   Highest Expense
                 </p>
                 <h3 className="text-base sm:text-lg xl:text-xl font-bold text-[#a855f7] tracking-tight">
-                  {highestExpenseCategory}
+                  {highestExpenseCategory || "No Expenses"}
                 </h3>
+
                 <p className="mt-0.5 text-[10px] xl:text-[11px] text-slate-500 leading-tight">
-                  ₹{highestExpenseAmount.toLocaleString()} ({highestExpensePercentage}%)
+                  {highestExpenseAmount
+                    ? `₹${highestExpenseAmount.toLocaleString()} (${highestExpensePercentage}%)`
+                    : "Add an expense to see insights"}
                 </p>
               </div>
             </div>

@@ -10,7 +10,6 @@ import Budget from "../pages/Budget/Budget";
 import Analytics from "../pages/Analytics/Analytics";
 import Profile from "../pages/Profile/Profile";
 import NotFound from "../pages/NotFound/NotFound";
-
  
 export default function AppRoutes() {
   return (
@@ -24,6 +23,7 @@ export default function AppRoutes() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+       
       </Route>
 
       <Route path="/login" element={<Login />} />

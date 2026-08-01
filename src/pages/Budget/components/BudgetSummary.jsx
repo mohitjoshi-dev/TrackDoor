@@ -2,8 +2,9 @@ import { Wallet, TrendingDown, PiggyBank } from "lucide-react";
 import BudgetProgress from "./BudgetProgress";
 import { useBudgets } from "@/context/BudgetsContext";
 import { useTransactions } from "@/context/TransactionsContext";
+import BudgetMonthPicker from "./BudgetMonthPicker";
 
-export default function BudgetSummary() {
+export default function BudgetSummary({selectedMonth, setSelectedMonth,}) {
   const { transactions } = useTransactions();
   const { budgets } = useBudgets();
 
@@ -15,20 +16,30 @@ export default function BudgetSummary() {
 
   // Placeholder until transactions are connected
   const totalSpent = transactions
-  .filter(
-    (transaction) =>
-      transaction.type.toLowerCase() === "expense"
-  )
+  .filter((transaction) => {
+    if (transaction.type?.toLowerCase() !== "expense") {
+      return false;
+    }
+
+    const date = new Date(transaction.date);
+
+    return (
+      date.getMonth() === selectedMonth.getMonth() &&
+      date.getFullYear() === selectedMonth.getFullYear()
+    );
+  })
   .reduce(
     (total, transaction) =>
-      total + Number(transaction.amount),
+      total + Number(transaction.amount || 0),
     0
   );
+
   const remaining = totalBudget - totalSpent;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       {/* Header */}
+      <div className="flex items-start justify-between">
       <div className="flex items-center gap-3">
         <div className="rounded-xl bg-primary/10 p-3">
           <Wallet className="h-6 w-6 text-primary" />
@@ -43,6 +54,13 @@ export default function BudgetSummary() {
             Track your monthly spending
           </p>
         </div>
+      </div>
+
+        <BudgetMonthPicker
+          selectedMonth={selectedMonth}
+          onChange={setSelectedMonth}
+          transactions={transactions}
+        />
       </div>
 
       {/* Stats */}

@@ -192,6 +192,10 @@ export const getFinancialHealthScore = (
   transactions = [],
   budgets = []
 ) => {
+  if (transactions.length === 0) {
+    return null;
+  }
+
   let score = 0;
 
   // 40 points: Savings Rate
@@ -229,6 +233,13 @@ export const getFinancialHealthScore = (
 
 
 export const getHealthStatus = (score) => {
+  if (score === null) {
+    return {
+      label: "No Data Available",
+      color: "text-muted-foreground",
+    };
+  }
+  
   if (score >= 90)
     return {
       label: "Excellent",

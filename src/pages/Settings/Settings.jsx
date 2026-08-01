@@ -14,7 +14,7 @@ console.log(settings);
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          Profile
+          Settings
         </h1>
 
         <p className="mt-2 text-muted-foreground">

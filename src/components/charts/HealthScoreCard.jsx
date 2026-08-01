@@ -33,7 +33,7 @@ export default function HealthScoreCard({
         <div className="mt-8 flex items-end gap-2">
 
           <span className="animate-pulse text-6xl font-black">
-            {score}
+            {score ?? "--"}
           </span>
 
           <span className="mb-2 text-xl text-muted-foreground">
@@ -48,16 +48,20 @@ export default function HealthScoreCard({
 
           <div
             className={`h-full rounded-full transition-all duration-700 ${
-                        score >= 90
-                            ? "bg-emerald-500"
-                            : score >= 75
-                            ? "bg-cyan-500"
-                            : score >= 60
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
-                        }`}
+              score === null
+                ? "bg-muted"
+                : score >= 90
+                ? "bg-emerald-500"
+                : score >= 75
+                ? "bg-cyan-500"
+                : score >= 60
+                ? "bg-yellow-500"
+                : "bg-red-500"
+            }`}
+            style={{
+              width: score === null ? "0%" : `${score}%`,
+            }}
           />
-
         </div>
 
         {/* Status */}
@@ -71,19 +75,15 @@ export default function HealthScoreCard({
             </p>
 
             <p className="text-muted-foreground">
-                {score >= 90 &&
-                    "Outstanding! Your finances are in excellent shape."}
-
-                {score >= 75 &&
-                    score < 90 &&
-                    "You're doing well. Keep maintaining your budget."}
-
-                {score >= 60 &&
-                    score < 75 &&
-                    "You're on the right track, but there is room for improvement."}
-
-                {score < 60 &&
-                    "Your spending needs attention. Review your budgets."}
+              {score === null
+                ? "Add your first income and expense transactions to calculate your financial health."
+                : score >= 90
+                ? "Outstanding! Your finances are in excellent shape."
+                : score >= 75
+                ? "You're doing well. Keep maintaining your budget."
+                : score >= 60
+                ? "You're on the right track, but there is room for improvement."
+                : "Your spending needs attention. Review your budgets."}
             </p>
 
           </div>
@@ -95,7 +95,7 @@ export default function HealthScoreCard({
             </p>
 
             <p className="text-3xl font-bold">
-              {score}
+              {score ?? "--"}
             </p>
 
           </div>

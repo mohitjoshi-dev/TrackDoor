@@ -6,7 +6,6 @@ import BudgetForm from "./components/BudgetForm";
 import DeleteBudgetDialog from "./dialog/DeleteBudgetDialog";import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-
 export default function Budget() {
   const { budgets } = useBudgets();
   const [formOpen, setFormOpen] = useState(false);
@@ -14,6 +13,7 @@ export default function Budget() {
 
   const [editingBudget, setEditingBudget] = useState(null);
   const [selectedBudget, setSelectedBudget] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
 
   const handleAdd = () => {
     setEditingBudget(null);
@@ -51,7 +51,10 @@ export default function Budget() {
     </div>
 
     {/* Budget Summary */}
-    <BudgetSummary />
+    <BudgetSummary
+      selectedMonth={selectedMonth}
+      setSelectedMonth={setSelectedMonth}
+    />
 
     {/* Budget Cards */}
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -59,6 +62,7 @@ export default function Budget() {
         <BudgetCard
           key={budget.id}
           budget={budget}
+          selectedMonth={selectedMonth}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

@@ -1,8 +1,13 @@
+import { useState } from "react";
+
 import CardWrapper from "@/components/common/CardWrapper";
 import SettingsItem from "./SettingsItem";
 import { Download, Upload, Trash2 } from "lucide-react";
+import ExportDialog from "@/pages/Settings/dialogs/ExportDialog";
 
 export default function DataCard() {
+const [exportOpen, setExportOpen] = useState(false);
+
 const data = [
   {
     title: "Export Data",
@@ -11,6 +16,7 @@ const data = [
     icon: Download,
     iconBg: "bg-blue-500/20",
     iconColor: "text-blue-500",
+    onClick: () => setExportOpen(true),
   },
   {
     title: "Import Data",
@@ -32,25 +38,33 @@ const data = [
 
 
   return (
+  <>
     <CardWrapper>
-        <div className="mb-6">
+      <div className="mb-6">
         <h2 className="text-xl font-bold">
-            Data
+          Data
         </h2>
 
         <p className="text-sm text-muted-foreground">
-            Backup and manage your application data.
+          Backup and manage your application data.
         </p>
-        </div>
+      </div>
 
-        <div className="space-y-1">
+      <div className="space-y-1">
         {data.map((item) => (
-            <SettingsItem
+          <SettingsItem
             key={item.title}
             item={item}
-            />
+            onClick={item.onClick}
+          />
         ))}
-        </div>
+      </div>
     </CardWrapper>
-  );
+
+    <ExportDialog
+      open={exportOpen}
+      onOpenChange={setExportOpen}
+    />
+  </>
+);
 }

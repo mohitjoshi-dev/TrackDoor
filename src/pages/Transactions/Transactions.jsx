@@ -15,6 +15,7 @@ import TransactionForm from "@/pages/Transactions/components/TransactionForm";
 import { toast } from "sonner";
 import { categoryData } from "@/constants/categoryData";
 import { Button } from "@/components/ui/button";
+import { useNotifications } from "@/context/NotificationContext";
 
 export default function Transactions() {
   const [open, setOpen] = useState(false);
@@ -31,6 +32,7 @@ export default function Transactions() {
   
   // Using the global context instead of local state!
   const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
+  const { addNotification } = useNotifications();
 
   const filteredTransactions = [...transactions]
   .filter((transaction) => {
@@ -203,9 +205,18 @@ export default function Transactions() {
                   key={transaction.id}
                   transaction={transaction}
                   onDelete={(id) => {
-                    deleteTransaction(id);
-                    toast.success("Transaction deleted successfully!");
-                  }}
+                  const transaction = transactions.find((t) => t.id === id);
+
+                  deleteTransaction(id);
+
+                  addNotification({
+                    title: "Transaction Deleted",
+                    message: `${transaction?.title ?? "Transaction"} was deleted.`,
+                    type: "error",
+                  });
+
+                  toast.success("Transaction deleted successfully!");
+                }}
                   onEdit={() => {
                     setSelectedTransaction(transaction);
                     setEditOpen(true);
@@ -232,10 +243,17 @@ export default function Transactions() {
             <TransactionForm
               onCancel={() => setOpen(false)}
               onSubmit={(data) => {
-                addTransaction(data);
-                toast.success("Transaction added successfully!");
-                setOpen(false);
-              }}
+              addTransaction(data);
+
+              addNotification({
+                title: "Expense Added",
+                message: `₹${data.amount} added to ${data.category}`,
+                type: "success",
+              });
+
+              toast.success("Transaction added successfully!");
+              setOpen(false);
+            }}
             />
           </div>
         </DialogContent>
@@ -260,10 +278,17 @@ export default function Transactions() {
               initialData={selectedTransaction}
               onCancel={() => setEditOpen(false)}
               onSubmit={(data) => {
-                updateTransaction(selectedTransaction.id, data);
-                toast.success("Transaction updated successfully!");
-                setEditOpen(false);
-              }}
+              updateTransaction(selectedTransaction.id, data);
+
+              addNotification({
+                title: "Transaction Updated",
+                message: `${data.title} was updated.`,
+                type: "info",
+              });
+
+              toast.success("Transaction updated successfully!");
+              setEditOpen(false);
+            }}
             />
           </div>
         </DialogContent>

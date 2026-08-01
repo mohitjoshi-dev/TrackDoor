@@ -1,5 +1,4 @@
 import {
-  Bell,
   Palette,
   Moon,
   Sun,
@@ -24,6 +23,8 @@ import {
 import { useSettings } from "@/context/SettingsContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import NotificationBell from "@/components/notifications/NotificationBell";
+import ProfileMenu from "@/components/profile/ProfileMenu";
 
 export default function Navbar() {
   const { settings, updateSetting } = useSettings();
@@ -49,15 +50,7 @@ export default function Navbar() {
         </div>
 
         {/* Notification */}
-        <Button
-          size="icon"
-          variant="ghost"
-          className="relative h-11 w-11 rounded-xl border border-border bg-transparent transition-all hover:scale-105 hover:bg-secondary"
-        >
-          <Bell className="h-5 w-5 text-muted-foreground" />
-          {/* Notification Dot */}
-          <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
-        </Button>
+        <NotificationBell />
 
         {/* Reset Demo Data Button */}
         <Button
@@ -120,16 +113,7 @@ export default function Navbar() {
         </Button>
 
         {/* Profile */}
-        <button className="flex items-center gap-3 rounded-xl border border-border bg-card px-3 py-2 hover:bg-secondary transition-colors">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-primary to-blue-500 font-bold text-primary-foreground">
-            MJ
-          </div>
-          <div className="hidden text-left xl:block">
-            <p className="text-sm font-semibold text-foreground">Mohit</p>
-            <p className="text-xs text-muted-foreground">Free Plan</p>
-          </div>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        </button>
+        <ProfileMenu />
       </div>
     </header>
   );

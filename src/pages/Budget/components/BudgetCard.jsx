@@ -4,7 +4,7 @@ import BudgetProgress from "./BudgetProgress";
 import { categoryData } from "@/constants/categoryData";
 import { useTransactions } from "@/context/TransactionsContext";
 
-export default function BudgetCard({ budget, onEdit, onDelete }) {
+export default function BudgetCard({ budget, onEdit, onDelete, selectedMonth, }) {
   // Temporary value until transaction calculation is added[cite: 5]
   const { transactions } = useTransactions();
   const spent = transactions
@@ -16,8 +16,12 @@ export default function BudgetCard({ budget, onEdit, onDelete }) {
       return false;
     }
 
+    const date = new Date(transaction.date);
+
     return (
-      transaction.category.toLowerCase() === budget.category
+      transaction.category.toLowerCase() === budget.category &&
+      date.getMonth() === selectedMonth.getMonth() &&
+      date.getFullYear() === selectedMonth.getFullYear()
     );
   })
   .reduce(
