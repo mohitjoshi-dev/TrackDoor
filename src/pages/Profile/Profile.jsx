@@ -2,8 +2,6 @@ import ProfileCard from "@/pages/Profile/components/ProfileCard";
 import FinancialOverview from "@/pages/Profile/components/FinancialOverview";
 import StatisticsCard from "@/pages/Profile/components/StatisticsCard";
 import SavingsGoal from "@/pages/Profile/components/SavingsGoal";
-import PreferencesCard from "@/pages/Profile/components/PreferencesCard";
-import DataManagementCard from "@/pages/Profile/components/DataManagementCard";
 
 export default function Profile() {
   return (
@@ -27,8 +25,6 @@ export default function Profile() {
         <StatisticsCard />
         <SavingsGoal />
 
-        <PreferencesCard />
-        <DataManagementCard />
       </div>
     </div>
   );

@@ -17,8 +17,12 @@ import {
 
 import { Calendar } from "lucide-react";
 import { useState } from "react";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
+
 
 export default function CategoryPieChart({ data, timeFilter, setTimeFilter, }) {
+  const { preferences } = useSettings();
    const chartData = categoryData
     .filter((category) => category.id !== "income")
     .map((category) => {
@@ -168,7 +172,7 @@ export default function CategoryPieChart({ data, timeFilter, setTimeFilter, }) {
 
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
               <p className="text-3xl font-bold text-white">
-                ₹{total.toLocaleString()}
+                {formatCurrency(total, preferences.currency)}
               </p>
 
               <p className="mt-1 text-sm text-slate-400">
@@ -212,7 +216,7 @@ export default function CategoryPieChart({ data, timeFilter, setTimeFilter, }) {
 
                   <div className="text-right">
                     <p className="text-lg font-bold text-white">
-                      ₹{item.value.toLocaleString()}
+                     {formatCurrency(item.value, preferences.currency)}
                     </p>
                     <p className="text-sm text-slate-400">
                       {percentage}%

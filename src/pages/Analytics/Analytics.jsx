@@ -35,8 +35,11 @@ import MonthlyTrendChart from "@/components/charts/MonthlyTrendChart";
 import InsightCard from "@/components/charts/InsightCard";
 import { useNavigate } from "react-router-dom";
 import HealthScoreCard from "@/components/charts/HealthScoreCard";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function Analytics() {
+const { preferences } = useSettings();
 const navigate = useNavigate();
 const [timeFilter, setTimeFilter] = useState("1m");
 
@@ -123,7 +126,7 @@ const healthStatus =
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <SummaryCard
         title="Total Income"
-        value={`₹${totalIncome.toLocaleString()}`}
+        value={formatCurrency(totalIncome, preferences.currency)}
         icon={Wallet}
         color="text-emerald-500"
         bgColor="bg-emerald-500/10"
@@ -131,7 +134,7 @@ const healthStatus =
 
       <SummaryCard
         title="Total Expense"
-        value={`₹${totalExpense.toLocaleString()}`}
+        value={formatCurrency(totalExpense, preferences.currency)}
         icon={CreditCard}
         color="text-red-500"
         bgColor="bg-red-500/10"
@@ -139,7 +142,7 @@ const healthStatus =
 
       <SummaryCard
         title="Net Savings"
-        value={`₹${netSavings.toLocaleString()}`}
+        value={formatCurrency(netSavings, preferences.currency)}
         icon={PiggyBank}
         color="text-cyan-500"
         bgColor="bg-cyan-500/10"
@@ -193,7 +196,10 @@ const healthStatus =
         value={topCategory?.name || "N/A"}
         subtitle={
           topCategory
-            ? `₹${topCategory.amount.toLocaleString()}`
+            ? formatCurrency(
+              topCategory.amount,
+              preferences.currency
+            )
             : "No expenses yet"
         }
         icon={ShoppingBag}
@@ -210,8 +216,11 @@ const healthStatus =
         title="Largest Expense"
         value={
           largestExpense
-            ? `₹${largestExpense.amount.toLocaleString()}`
-            : "₹0"
+            ? formatCurrency(
+              largestExpense.amount,
+              preferences.currency
+            )
+            : formatCurrency(0, preferences.currency)
         }
         subtitle={
           largestExpense?.title || "No expenses"
@@ -228,7 +237,7 @@ const healthStatus =
 
       <InsightCard
         title="Average Expense"
-        value={`₹${averageExpense.toLocaleString()}`}
+        value={formatCurrency(averageExpense, preferences.currency)}
         subtitle="Per expense transaction"
         icon={BadgeIndianRupee}
         color="text-cyan-500"

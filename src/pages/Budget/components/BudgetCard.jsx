@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button";
 import BudgetProgress from "./BudgetProgress";
 import { categoryData } from "@/constants/categoryData";
 import { useTransactions } from "@/context/TransactionsContext";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function BudgetCard({ budget, onEdit, onDelete, selectedMonth, }) {
+  const { preferences } = useSettings();
+
   // Temporary value until transaction calculation is added[cite: 5]
   const { transactions } = useTransactions();
   const spent = transactions
@@ -102,7 +106,10 @@ export default function BudgetCard({ budget, onEdit, onDelete, selectedMonth, })
 
           <div className="flex flex-col items-end gap-2">
             <div className="rounded-xl bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
-              ₹{budget.limit.toLocaleString()}
+              {formatCurrency(
+                budget.limit,
+                preferences.currency
+              )}
             </div>
             <div className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${getStatusColor()}`}>
               {getStatusLabel()}
@@ -132,7 +139,10 @@ export default function BudgetCard({ budget, onEdit, onDelete, selectedMonth, })
                   : "text-red-400"
               }`}
             >
-              ₹{Math.max(0, remaining).toLocaleString()}
+              {formatCurrency(
+                Math.max(0,remaining),
+                preferences.currency
+              )}
             </h2>
           </div>
 

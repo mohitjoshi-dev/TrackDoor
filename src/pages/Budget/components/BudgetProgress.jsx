@@ -1,18 +1,20 @@
-export default function BudgetProgress({
-  spent,
-  limit,
-}) {
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
+
+export default function BudgetProgress({spent, limit, }) {
+  const { preferences } = useSettings();
+
   const percentage = Math.min((spent / limit) * 100, 100);
 
   return (
     <div className="space-y-3">
       <div className="flex justify-between text-sm">
         <span className="font-medium">
-          ₹{spent.toLocaleString()}
+          {formatCurrency(spent, preferences.currency)}
         </span>
 
         <span className="text-muted-foreground">
-          ₹{limit.toLocaleString()}
+          {formatCurrency(limit, preferences.currency)}
         </span>
       </div>
 
@@ -43,7 +45,10 @@ export default function BudgetProgress({
               : "text-emerald-500"
           }
         >
-          ₹{Math.max(limit - spent, 0).toLocaleString()} Remaining
+          {formatCurrency(
+              Math.max(limit-spent,0),
+              preferences.currency
+          )} Remaining
         </span>
       </div>
     </div>

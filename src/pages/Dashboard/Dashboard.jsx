@@ -6,8 +6,12 @@ import RecentTransaction from "@/pages/Dashboard/components/RecentTransaction";
 import { Plus } from "lucide-react";
 import { useMemo } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function Dashboard() {
+const { preferences } = useSettings();
+
 const { transactions } = useTransactions(); 
 console.log("Dashboard Transactions:", transactions);
 
@@ -29,7 +33,7 @@ const stats = useMemo(() => {
     {
       id: 1,
       title: "Total Balance",
-      value: `₹${balance.toLocaleString("en-IN")}`,
+      value: formatCurrency( balance, preferences.currency),
       subtitle: "Current available balance",
       change: `${savings}% Saved`,
       changeType: savings >= 0 ? "increase" : "decrease",
@@ -38,7 +42,7 @@ const stats = useMemo(() => {
     {
       id: 2,
       title: "Income",
-      value: `₹${income.toLocaleString("en-IN")}`,
+      value: formatCurrency( income, preferences.currency),
       subtitle: "Total income",
       change: "+100%",
       changeType: "increase",
@@ -47,7 +51,7 @@ const stats = useMemo(() => {
     {
       id: 3,
       title: "Expenses",
-      value: `₹${expenses.toLocaleString("en-IN")}`,
+      value: formatCurrency( expenses, preferences.currency),
       subtitle: "Total expenses",
       change: "-100%",
       changeType: "decrease",
@@ -58,7 +62,7 @@ const stats = useMemo(() => {
       title: "Savings Rate",
       value: `${savings}%`,
       subtitle: "Income saved",
-      change: `${balance >= 0 ? "+" : ""}₹${balance.toLocaleString("en-IN")}`,
+      change: `${balance >= 0 ? "+" : ""}${formatCurrency(balance, preferences.currency)}`,
       changeType: balance >= 0 ? "increase" : "decrease",
       color: "violet",
     },

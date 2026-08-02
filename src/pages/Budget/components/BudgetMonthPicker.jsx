@@ -8,9 +8,12 @@ import {
 } from "@/components/ui/popover";
 
 import { Button } from "@/components/ui/button";
+import { useSettings } from "@/context/SettingsContext";
+import { formatDate } from "@/utils/formatDate";
 
 export default function BudgetMonthPicker({selectedMonth,onChange,transactions = [],}) {
-  
+  const { preferences } = useSettings();
+
   const months = useMemo(() => {
   const uniqueMonths = new Map();
 
@@ -47,10 +50,16 @@ export default function BudgetMonthPicker({selectedMonth,onChange,transactions =
 }, [transactions]);
 
 const formatMonth = (date) =>
-  date.toLocaleDateString("en-IN", {
-    month: "short",
-    year: "numeric",
-  });
+  new Intl.DateTimeFormat(
+    preferences.dateFormat === "MM/DD/YYYY"
+      ? "en-US"
+      : "en-GB",
+    {
+      month: "long",
+      year: "numeric",
+      timeZone: preferences.timezone,
+    }
+  ).format(date);
   
   return (
     <Popover>

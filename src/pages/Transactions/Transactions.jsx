@@ -16,6 +16,9 @@ import { toast } from "sonner";
 import { categoryData } from "@/constants/categoryData";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/context/NotificationContext";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { useSettings } from "@/context/SettingsContext";
+import { formatDate } from "@/utils/formatDate";
 
 export default function Transactions() {
   const [open, setOpen] = useState(false);
@@ -55,6 +58,8 @@ export default function Transactions() {
       new Date(b.date).getTime() -
       new Date(a.date).getTime()
   );
+
+  const { preferences } = useSettings();
 
   return (
     <div className="space-y-6">
@@ -247,7 +252,10 @@ export default function Transactions() {
 
               addNotification({
                 title: "Expense Added",
-                message: `₹${data.amount} added to ${data.category}`,
+                message: `${formatCurrency(
+                  data.amount,
+                  preferences.currency
+                )} added to ${data.category}`,
                 type: "success",
               });
 

@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/select";
 
 import { Calendar } from "lucide-react";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 const COLORS = ["url(#incomeGradient)", "url(#expenseGradient)"];
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, currency }) => {
   if (!active || !payload?.length) return null;
 
   const item = payload[0];
@@ -46,15 +48,13 @@ const CustomTooltip = ({ active, payload }) => {
           isIncome ? "text-[#22C55E]" : "text-[#FB7185]"
         }`}
       >
-        ₹{item.value.toLocaleString()}
+        {formatCurrency(item.value, currency)}
       </p>
     </div>
   );
 };
 
-const RenderLabel = (props) => {
-  const { x, y, width, value, index } = props;
-
+const RenderLabel = ({ x, y, width, value, index, currency }) => {
   return (
     <text
       x={x + width / 2}
@@ -64,7 +64,7 @@ const RenderLabel = (props) => {
       fontWeight={600}
       fill={index === 0 ? "#22C55E" : "#FB7185"}
     >
-      ₹{value.toLocaleString()}
+      {formatCurrency(value, currency)}
     </text>
   );
 };
@@ -78,6 +78,7 @@ export default function IncomeExpenseChart({
   timeFilter,
   setTimeFilter,
 }) {
+  const { preferences } = useSettings();
   const savings = totalIncome - totalExpense;
   const savingsRate =
     totalIncome > 0 ? ((savings / totalIncome) * 100).toFixed(1) : 0;
@@ -208,11 +209,17 @@ export default function IncomeExpenseChart({
 
               <Tooltip
                 cursor={{ fill: "transparent" }}
-                content={<CustomTooltip />}
+                content={
+                  <CustomTooltip currency={preferences.currency} />
+                }
               />
 
               <Bar dataKey="amount" radius={[8, 8, 0, 0]} barSize={80}>
-                <LabelList content={<RenderLabel />} />
+                <LabelList
+                  content={
+                    <RenderLabel currency={preferences.currency} />
+                  }
+                />
                 {data.map((_, index) => (
                   <Cell key={index} fill={COLORS[index]} />
                 ))}
@@ -248,7 +255,7 @@ export default function IncomeExpenseChart({
                   Net Savings
                 </p>
                 <h3 className="text-base sm:text-lg xl:text-xl font-bold text-emerald-400 tracking-tight">
-                  ₹{savings.toLocaleString()}
+                  {formatCurrency(savings, preferences.currency)}
                 </h3>
                 <p className="mt-0.5 text-[10px] xl:text-[11px] text-slate-500 leading-tight">
                   Income - Expense
@@ -325,7 +332,10 @@ export default function IncomeExpenseChart({
 
                 <p className="mt-0.5 text-[10px] xl:text-[11px] text-slate-500 leading-tight">
                   {highestExpenseAmount
-                    ? `₹${highestExpenseAmount.toLocaleString()} (${highestExpensePercentage}%)`
+                    ? `${formatCurrency(
+                      highestExpenseAmount,
+                      preferences.currency
+                  )} (${highestExpensePercentage}%)`
                     : "Add an expense to see insights"}
                 </p>
               </div>

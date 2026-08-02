@@ -1,10 +1,13 @@
 import { ReceiptText, TrendingUp, Banknote, Trophy, BarChart2 } from "lucide-react";
 import { useTransactions } from "@/context/TransactionsContext";
 import CardWrapper from "../../../components/common/CardWrapper";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function StatisticsCard() {
-  const { transactions } = useTransactions();
 
+  const { transactions } = useTransactions();
+  const { preferences } = useSettings();
   const totalTransactions = transactions.length;
   const expenses = transactions.filter((t) => t.type === "expense");
   const averageExpense = expenses.length > 0 ? expenses.reduce((sum, t) => sum + t.amount, 0) / expenses.length : 0;
@@ -30,7 +33,7 @@ export default function StatisticsCard() {
     },
     {
       label: "Largest Expense",
-      value: `₹${largestExpense.toLocaleString("en-IN")}`,
+      value: formatCurrency(largestExpense, preferences.currency),
       sub: "Single transaction",
       icon: Banknote,
       iconColor: "text-emerald-400",
@@ -46,7 +49,7 @@ export default function StatisticsCard() {
     },
     {
       label: "Average Expense",
-      value: `₹${averageExpense.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,
+      value: formatCurrency(averageExpense, preferences.currency),
       sub: "Per transaction",
       icon: TrendingUp,
       iconColor: "text-orange-400",

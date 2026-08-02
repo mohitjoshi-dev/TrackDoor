@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useBudgets } from "@/context/BudgetsContext";
 import { useSettings } from "@/context/SettingsContext";
+import { formatDate } from "@/utils/formatDate";
 import { ArchiveRestore, Download, FileJson, FileSpreadsheet, Receipt, Wallet, Settings2, HardDrive } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -283,7 +284,11 @@ export default function ExportDialog({
             {lastBackup ? (
               <>
                 <p className="font-medium">
-                  {new Date(lastBackup).toLocaleDateString()}
+                  {formatDate(
+                    lastBackup,
+                    settings.preferences.dateFormat,
+                    settings.preferences.timezone
+                  )}
                 </p>
 
                 <p className="text-sm text-muted-foreground">

@@ -23,6 +23,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 export default function TransactionForm({ onCancel, onSubmit, initialData, mode = "add", }) {
+  const { preferences } = useSettings();
   const [formData, setFormData] = useState(
     initialData || {
       title: "",
@@ -123,7 +124,7 @@ export default function TransactionForm({ onCancel, onSubmit, initialData, mode 
           type="number"
           value={formData.amount}
           onChange={handleChange}
-          placeholder="₹0.00"
+          placeholder={`${preferences.currency} 0.00`}
         />
         {errors.amount && (
         <p className="text-sm text-red-500 mt-1">

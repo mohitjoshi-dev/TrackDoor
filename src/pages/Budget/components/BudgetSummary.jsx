@@ -3,8 +3,11 @@ import BudgetProgress from "./BudgetProgress";
 import { useBudgets } from "@/context/BudgetsContext";
 import { useTransactions } from "@/context/TransactionsContext";
 import BudgetMonthPicker from "./BudgetMonthPicker";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function BudgetSummary({selectedMonth, setSelectedMonth,}) {
+  const { preferences } = useSettings();
   const { transactions } = useTransactions();
   const { budgets } = useBudgets();
 
@@ -71,7 +74,7 @@ export default function BudgetSummary({selectedMonth, setSelectedMonth,}) {
           </p>
 
           <h3 className="mt-2 text-2xl font-bold">
-            ₹{totalBudget.toLocaleString()}
+            {formatCurrency(totalBudget, preferences.currency)}
           </h3>
         </div>
 
@@ -81,7 +84,7 @@ export default function BudgetSummary({selectedMonth, setSelectedMonth,}) {
           </p>
 
           <h3 className="mt-2 text-2xl font-bold text-red-500">
-            ₹{totalSpent.toLocaleString()}
+            {formatCurrency(totalSpent, preferences.currency)}
           </h3>
         </div>
 
@@ -97,7 +100,7 @@ export default function BudgetSummary({selectedMonth, setSelectedMonth,}) {
                 : "text-red-500"
             }`}
           >
-            ₹{remaining.toLocaleString()}
+            {formatCurrency(remaining, preferences.currency)}
           </h3>
         </div>
       </div>

@@ -85,12 +85,13 @@ const themes = [
         </Button>
         
         <Button
-        onClick={() => {
+          disabled={selectedTheme === settings.theme}
+          onClick={() => {
             updateSetting("theme", selectedTheme);
             onOpenChange(false);
-        }}
+          }}
         >
-        Apply
+          Apply
         </Button>
         
         </div>

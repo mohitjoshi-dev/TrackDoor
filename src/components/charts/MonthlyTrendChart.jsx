@@ -8,8 +8,10 @@ import {
   YAxis,
 } from "recharts";
 import { TrendingUp } from "lucide-react";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
-const CustomDot = ({ cx, cy, payload }) => (
+const CustomDot = ({ cx, cy, payload, currency }) => (
   <g>
     <circle
       cx={cx}
@@ -29,13 +31,15 @@ const CustomDot = ({ cx, cy, payload }) => (
         fontSize={13}
         fontWeight={600}
       >
-        ₹{payload.amount.toLocaleString()}
+       {formatCurrency(payload.amount, currency)}
       </text>
     )}
   </g>
 );
 
 export default function MonthlyTrendChart({ data = [] }) {
+  const { preferences } = useSettings();
+
   // Calculate Average
   const total = data.reduce((sum, item) => sum + item.amount, 0);
   const average = Math.round(total / Math.max(data.length, 1));
@@ -82,7 +86,7 @@ export default function MonthlyTrendChart({ data = [] }) {
                 Avg. Monthly Spend
               </p>
               <p className="mt-0.5 text-xl font-bold text-white">
-                ₹{average.toLocaleString()}
+                {formatCurrency(average, preferences.currency)}
               </p>
             </div>
             
@@ -108,7 +112,7 @@ export default function MonthlyTrendChart({ data = [] }) {
         <div className="relative mt-8 h-100 w-full">
           {/* Y-Axis Currency Label */}
           <div className="absolute -top-4 left-0 text-xs font-medium text-slate-400">
-            (₹)
+            ({preferences.currency})
           </div>
 
           <ResponsiveContainer width="100%" height="100%">
@@ -144,7 +148,7 @@ export default function MonthlyTrendChart({ data = [] }) {
                     )}K`;
                   }
 
-                  return `₹${value}`;
+                  return formatCurrency(value, preferences.currency);
                 }}
               />
 
@@ -160,7 +164,10 @@ export default function MonthlyTrendChart({ data = [] }) {
                   color: "#fff",
                 }}
                 itemStyle={{ color: "#fff", fontWeight: "bold" }}
-                formatter={(value) => [`₹${value.toLocaleString()}`, "Expense"]}
+                formatter={(value) => [
+                  formatCurrency(value, preferences.currency),
+                  "Expense",
+                ]}
               />
 
               {/* Area completely updated for solid fill */}
@@ -172,7 +179,7 @@ export default function MonthlyTrendChart({ data = [] }) {
                 fill="#8B5CF6"
                 fillOpacity={0.15}
                 animationDuration={1000}
-                dot={<CustomDot />}
+                dot={<CustomDot currency={preferences.currency} />}
                 activeDot={{
                   r: 7,
                   stroke: "#8B5CF6",

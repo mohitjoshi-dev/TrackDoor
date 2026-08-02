@@ -7,9 +7,12 @@ import {
 
 import { useTransactions } from "@/context/TransactionsContext";
 import CardWrapper from "../../../components/common/CardWrapper";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function FinancialOverview() {
 
+const { preferences } = useSettings();
 const { transactions } = useTransactions();
 const totalIncome = transactions
   .filter((t) => t.type === "income")
@@ -29,7 +32,7 @@ const savingsRate =
 const overview = [
   {
     title: "Total Income",
-    value: `₹${totalIncome.toLocaleString("en-IN")}`,
+    value: formatCurrency(totalIncome, preferences.currency),
     trend: "▲ +12.5%",
     trendText: " vs last month",
     trendColor: "text-emerald-500",
@@ -39,7 +42,7 @@ const overview = [
   },
   {
     title: "Total Expenses",
-    value: `₹${totalExpense.toLocaleString("en-IN")}`,
+    value: formatCurrency(totalExpense, preferences.currency),
     trend: "▼ +8.2%",
     trendText: " vs last month",
     trendColor: "text-rose-500",
@@ -49,7 +52,7 @@ const overview = [
   },
   {
     title: "Net Savings",
-    value: `₹${netSavings.toLocaleString("en-IN")}`,
+    value: formatCurrency(netSavings, preferences.currency),
     trend: "▲ +18.7%",
     trendText: " vs last month",
     trendColor: "text-emerald-500",

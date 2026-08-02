@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useSettings } from "@/context/SettingsContext";
+import { formatDate } from "@/utils/formatDate";
 
 const hour = new Date().getHours();
 
@@ -10,15 +12,7 @@ const greeting =
     ? "Good Afternoon"
     : "Good Evening";
 
-const date = new Date();
-
-const today = `${date.toLocaleDateString("en-IN", {
-  weekday: "long",
-})} • ${date.toLocaleDateString("en-IN", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-})}`;
+    
 
 export default function WelcomeBanner({
   username,
@@ -27,6 +21,26 @@ export default function WelcomeBanner({
   buttonIcon: ButtonIcon,
   onButtonClick,
 }) {
+
+const { preferences } = useSettings();
+const date = new Date();
+
+const weekday = new Intl.DateTimeFormat(
+  preferences.dateFormat === "MM/DD/YYYY"
+    ? "en-US"
+    : "en-GB",
+  {
+    weekday: "long",
+    timeZone: preferences.timezone,
+  }
+).format(date);
+
+const today = `${weekday} • ${formatDate(
+  date,
+  preferences.dateFormat,
+  preferences.timezone
+)}`;
+
   return (
     <section className="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-r from-background via-card to-background transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10">
       <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>

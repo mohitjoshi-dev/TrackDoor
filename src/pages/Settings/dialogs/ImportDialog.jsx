@@ -11,9 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Upload, FileJson, Receipt, Wallet, Settings2, CalendarDays, Download } from "lucide-react";
 import { toast } from "sonner";
 import { importBackup } from "@/services/export/importService";
+import { useSettings } from "@/context/SettingsContext";
+import { formatDate } from "@/utils/formatDate";
 
 export default function ImportDialog({ open, onOpenChange }) {
 
+const { settings } = useSettings();
 const [selectedFile, setSelectedFile] = useState(null);
 const [backupData, setBackupData] = useState(null);
 
@@ -240,7 +243,11 @@ const summaryCardClass =
 
                     <p className="mt-2 text-lg font-bold">
                         {backupData.exportedAt
-                            ? new Date(backupData.exportedAt).toLocaleDateString()
+                            ? formatDate(
+                              backupData.exportedAt,
+                              settings.preferences.dateFormat,
+                              settings.preferences.timezone
+                            )
                             : "Unknown"}
                     </p>
 

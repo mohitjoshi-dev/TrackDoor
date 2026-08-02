@@ -1,10 +1,13 @@
 import { Target, Sparkles } from "lucide-react";
 import CardWrapper from "../../../components/common/CardWrapper";
 import { useTransactions } from "@/context/TransactionsContext";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function SavingsGoal() {
-  const { transactions } = useTransactions();
 
+  const { transactions } = useTransactions();
+  const { preferences } = useSettings();
   const currentSavings = transactions.reduce(
     (sum, t) => sum + (t.type === "income" ? t.amount : -t.amount), 
     0
@@ -41,7 +44,7 @@ export default function SavingsGoal() {
           <div className="mb-6 flex items-end justify-between">
             <div>
               <p className="mb-1 text-sm font-medium text-slate-400">Monthly Savings Goal</p>
-              <h3 className="text-3xl font-bold text-white">₹{savingsGoal.toLocaleString("en-IN")}</h3>
+              <h3 className="text-3xl font-bold text-white">{formatCurrency(savingsGoal, preferences.currency)}</h3>
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold text-emerald-400">{Math.round(progress)}%</p>
@@ -60,11 +63,11 @@ export default function SavingsGoal() {
           {/* Bottom Stats */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-lg font-bold text-white">₹{displaySavings.toLocaleString("en-IN")}</p>
+              <p className="text-lg font-bold text-white">{formatCurrency(displaySavings, preferences.currency)}</p>
               <p className="text-xs font-medium text-slate-400">Saved</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-white">₹{remaining.toLocaleString("en-IN")}</p>
+              <p className="text-lg font-bold text-white">{formatCurrency(remaining, preferences.currency)}</p>
               <p className="text-xs font-medium text-slate-400">Remaining</p>
             </div>
           </div>
@@ -79,7 +82,7 @@ export default function SavingsGoal() {
               <p className="mt-1 text-xs leading-relaxed text-violet-200/70">
                 {remaining === 0 
                   ? "Incredible job! You have successfully reached your monthly savings target." 
-                  : `With ${daysLeft} days left in the month, try keeping your expenses down to save ₹${dailyTarget.toLocaleString("en-IN")} daily to hit your target.`
+                  : `With ${daysLeft} days left in the month, try keeping your expenses down to save ${formatCurrency(dailyTarget, preferences.currency)} daily to hit your target.`
                 }
               </p>
             </div>

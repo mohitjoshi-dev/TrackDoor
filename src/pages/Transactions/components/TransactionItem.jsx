@@ -13,54 +13,29 @@ import {
 } from "lucide-react";
 
 import { categoryData } from "@/constants/categoryData";
-
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { formatDate } from "@/utils/formatDate";
 
 export default function TransactionItem({ transaction, onDelete, onEdit }) {
   const { title, category, amount, date, type } = transaction;
-
   const formattedCategory =
-    category.charAt(0).toUpperCase() + category.slice(1);
+  category.charAt(0).toUpperCase() + category.slice(1);
+  
+  const { preferences } = useSettings();
+  const isIncome = type === "income";
+
+  const formattedAmount = `${isIncome ? "+" : "-"}${formatCurrency(
+    Math.abs(amount),
+    preferences.currency
+  )}`;
 
   const categoryInfo =
   categoryData.find((c) => c.id === category) || {};
 
   const Icon = categoryInfo.icon || CircleDollarSign;
 
-  const isIncome = type === "income";
-  const formatDate = (dateString) => {
-  // Handle old demo data
-  if (dateString === "Today" || dateString === "Yesterday") {
-    return dateString;
-  }
-
-  const date = new Date(dateString);
-
-  if (isNaN(date.getTime())) {
-    return dateString;
-  }
-
-  const today = new Date();
-  const yesterday = new Date();
-  yesterday.setDate(today.getDate() - 1);
-
-  if (date.toDateString() === today.toDateString()) {
-    return "Today";
-  }
-
-  if (date.toDateString() === yesterday.toDateString()) {
-    return "Yesterday";
-  }
-
-  return date.toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-  });
-};
-
-  const formattedAmount = `${isIncome ? "+" : "-"}₹${Math.abs(
-    amount
-  ).toLocaleString("en-IN")}`;
-
+  
   return (
     <div
        className="group relative flex cursor-pointer items-center justify-between rounded-2xl border border-transparent p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-secondary/60 hover:shadow-xl"
@@ -96,7 +71,13 @@ export default function TransactionItem({ transaction, onDelete, onEdit }) {
           >
             {formattedAmount}
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">{formatDate(date)}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {formatDate(
+              date,
+              preferences.dateFormat,
+              preferences.timezone
+            )}
+          </p>
         </div>
 
          <div className="flex items-center gap-1">

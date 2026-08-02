@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMemo, useState } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
+import { useSettings } from "@/context/SettingsContext";
+import { formatDate } from "@/utils/formatDate";
 import {
   ResponsiveContainer,
   LineChart,
@@ -14,6 +16,7 @@ import {
 export default function MonthlyOverview() {
   const [selectedPeriod, setSelectedPeriod] = useState("30D");
   const { transactions } = useTransactions();
+  const { preferences } = useSettings();
 
   const chartData = useMemo(() => {
     const limit =
@@ -31,10 +34,11 @@ export default function MonthlyOverview() {
       if (displayDate && (displayDate.includes("T") || displayDate.includes("-"))) {
         const dateObj = new Date(displayDate);
         if (!isNaN(dateObj.getTime())) {
-          displayDate = dateObj.toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-          });
+          displayDate = formatDate(
+            dateObj,
+            preferences.dateFormat,
+            preferences.timezone
+          );
         }
       }
 

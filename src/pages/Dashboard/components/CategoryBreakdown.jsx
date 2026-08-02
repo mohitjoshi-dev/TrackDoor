@@ -2,9 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { useMemo } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
+import { useSettings } from "@/context/SettingsContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function CategoryBreakdown() {
+  
   const { transactions } = useTransactions();
+  const { preferences } = useSettings();
 
    const categoryData = useMemo(() => {
     const colors = {
@@ -80,7 +84,7 @@ export default function CategoryBreakdown() {
                 fontSize="24"
                 fontWeight="700"
               >
-                {`₹${totalExpense.toLocaleString()}`}
+                {formatCurrency(totalExpense, preferences.currency)}
               </text>
               <text
                 x="50%"
@@ -113,7 +117,7 @@ export default function CategoryBreakdown() {
               </div>
 
               <span className="text-sm font-medium text-foreground">
-                ₹{category.value.toLocaleString()}
+                {formatCurrency(category.value, preferences.currency)}
               </span>
             </div>
           ))}
