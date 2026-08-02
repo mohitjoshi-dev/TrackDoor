@@ -4,9 +4,13 @@ import CardWrapper from "@/components/common/CardWrapper";
 import SettingsItem from "./SettingsItem";
 import { Download, Upload, Trash2 } from "lucide-react";
 import ExportDialog from "@/pages/Settings/dialogs/ExportDialog";
+import ImportDialog from "../dialogs/ImportDialog";
+import ClearDataDialog from "../dialogs/ClearDataDialog";
 
 export default function DataCard() {
 const [exportOpen, setExportOpen] = useState(false);
+const [importOpen, setImportOpen] = useState(false);
+const [clearOpen, setClearOpen] = useState(false);
 
 const data = [
   {
@@ -25,6 +29,7 @@ const data = [
     icon: Upload,
     iconBg: "bg-green-500/20",
     iconColor: "text-green-500",
+    onClick: () => setImportOpen(true),
   },
   {
     title: "Clear All Data",
@@ -33,6 +38,7 @@ const data = [
     icon: Trash2,
     iconBg: "bg-red-500/20",
     iconColor: "text-red-500",
+    onClick: () => setClearOpen(true),  
   },
 ];
 
@@ -65,6 +71,17 @@ const data = [
       open={exportOpen}
       onOpenChange={setExportOpen}
     />
+
+    <ImportDialog
+      open={importOpen}
+      onOpenChange={setImportOpen}
+    />
+
+    <ClearDataDialog
+      open={clearOpen}
+      onOpenChange={setClearOpen}
+    />    
+
   </>
 );
 }
