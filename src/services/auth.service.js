@@ -15,7 +15,11 @@ export async function signUp(email, password) {
     password,
   });
 
-  return { data, error };
+  return {
+    user: data?.user,
+    session: data?.session,
+    error,
+  };
 }
 
 export async function signOut() {

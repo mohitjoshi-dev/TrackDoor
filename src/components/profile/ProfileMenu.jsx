@@ -20,9 +20,21 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "@/services/auth.service";
 
 export default function ProfileMenu() {
 const navigate = useNavigate();
+
+async function handleLogout() {
+  const { error } = await signOut();
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
+  navigate("/login", { replace: true });
+}
 
   return (
     <DropdownMenu>
@@ -117,8 +129,8 @@ const navigate = useNavigate();
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
-        className="cursor-pointer rounded-xl py-3 text-red-500 focus:text-red-500"
-        onClick={() => navigate("/logout")}
+          className="cursor-pointer rounded-xl py-3 text-red-500 focus:text-red-500"
+          onClick={handleLogout}
         >
           <LogOut className="mr-3 h-4 w-4" />
           Logout

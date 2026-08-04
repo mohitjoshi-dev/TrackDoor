@@ -5,7 +5,26 @@ export default function SidebarItem({
   icon: Icon,
   label,
   collapsed,
+  onClick,
 }) {
+
+if (onClick) {
+  return (
+    <button
+      onClick={onClick}
+      className="relative mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-slate-400 transition-all duration-300 
+               hover:bg-slate-800/70 hover:text-white hover:translate-x-1">
+      <Icon className="h-5 w-5 shrink-0" />
+
+      {!collapsed && (
+        <span className="whitespace-nowrap text-sm font-medium">
+          {label}
+        </span>
+      )}
+    </button>
+  );
+}
+
   return (
     <NavLink to={to}>
       {({ isActive }) => (

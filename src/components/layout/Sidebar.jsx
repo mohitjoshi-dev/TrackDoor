@@ -5,8 +5,23 @@ import { Button } from "@/components/ui/button";
 import SidebarItem from "./SidebarItem";
 import { primaryNavigation, secondaryNavigation } from "@/constants/navigation";
 
+import { useNavigate } from "react-router-dom";
+import { signOut } from "@/services/auth.service";
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    const { error } = await signOut();
+
+    if (error) {
+      console.error(error.message);
+      return;
+    }
+
+    navigate("/login", { replace: true });
+  }
 
   return (
     <aside
@@ -72,14 +87,15 @@ export default function Sidebar() {
 
       <div className="mt-auto border-t border-border p-3">
         {secondaryNavigation.map((item) => (
-          <SidebarItem
-            key={item.label}
-            to={item.to}
-            icon={item.icon}
-            label={item.label}
-            collapsed={collapsed}
-          />
-        ))}
+        <SidebarItem
+          key={item.label}
+          to={item.label === "Logout" ? undefined : item.to}
+          icon={item.icon}
+          label={item.label}
+          collapsed={collapsed}
+          onClick={item.label === "Logout" ? handleLogout : undefined}
+        />
+      ))}
       </div>
     </aside>
   );

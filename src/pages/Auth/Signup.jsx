@@ -25,15 +25,21 @@ export default function Signup() {
     setLoading(true);
     setError("");
 
-    const { error } = await signUp(email, password);
+  const { user, error } = await signUp(email, password);
 
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-      return;
-    }
+  if (error) {
+    setError(error.message);
+    setLoading(false);
+    return;
+  }
 
-    navigate("/login");
+  if (!user) {
+    setError("User could not be created.");
+    setLoading(false);
+    return;
+  }
+
+  navigate("/login");
   }
 
   return (
