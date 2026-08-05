@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { useSettings } from "@/context/SettingsContext";
 import { useState, useEffect } from "react";
 import { categoryData } from "@/constants/categoryData";
 import { Calendar } from "@/components/ui/calendar";

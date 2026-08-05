@@ -20,7 +20,7 @@ export default function BudgetCard({ budget, onEdit, onDelete, selectedMonth, })
       return false;
     }
 
-    const date = new Date(transaction.date);
+    const date = new Date(transaction.transaction_date ?? transaction.date);
 
     return (
       transaction.category.toLowerCase() === budget.category &&

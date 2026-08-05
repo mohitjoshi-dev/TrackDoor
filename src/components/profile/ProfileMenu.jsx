@@ -21,9 +21,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "@/services/auth.service";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfileMenu() {
 const navigate = useNavigate();
+const { profile } = useAuth();
 
 async function handleLogout() {
   const { error } = await signOut();
@@ -45,12 +47,24 @@ async function handleLogout() {
         >
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-primary to-blue-500 font-bold text-primary-foreground">
-              MJ
+             {profile?.avatar_url ? (
+              <img
+                src={profile.avatar_url}
+                alt="Avatar"
+                className="h-full w-full rounded-full object-cover"
+              />
+            ) : (
+              profile?.full_name
+                ?.split(" ")
+                .map((word) => word[0])
+                .join("")
+                .toUpperCase() || "U"
+            )}
             </div>
 
             <div className="hidden text-left xl:block">
               <p className="text-sm font-semibold">
-                Mohit
+                {profile?.full_name || "User"}
               </p>
 
               <p className="text-xs text-muted-foreground">
@@ -70,7 +84,7 @@ async function handleLogout() {
         <DropdownMenuLabel className="p-3">
           <div>
             <h3 className="font-semibold">
-              Mohit Joshi
+              {profile?.full_name || "User"}
             </h3>
 
             <p className="mt-1 text-xs text-muted-foreground">

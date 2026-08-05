@@ -161,6 +161,8 @@ const healthStatus =
         data={chartData}
         totalIncome={totalIncome}
         totalExpense={totalExpense}
+        highestExpenseCategory={largestExpense?.category}
+        highestExpenseAmount={largestExpense?.amount}
         timeFilter={timeFilter}
         setTimeFilter={setTimeFilter}
       />

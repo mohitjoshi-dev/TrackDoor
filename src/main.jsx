@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { TransactionsProvider } from "@/context/TransactionsContext";
 import { Toaster } from "sonner";
 import { BudgetsProvider } from "@/context/BudgetsContext";
@@ -11,19 +12,19 @@ import { NotificationProvider } from "@/context/NotificationContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-  <BudgetsProvider>  
-    <TransactionsProvider>
+    <AuthProvider>
       <SettingsProvider>
         <ThemeProvider>
-          <NotificationProvider>
-        <>
-          <App />
-          <Toaster richColors position="top-right" />
-        </>
-          </NotificationProvider>        
+          <BudgetsProvider>
+            <TransactionsProvider>
+              <NotificationProvider>
+                <App />
+                <Toaster richColors position="top-right" />
+              </NotificationProvider>
+            </TransactionsProvider>
+          </BudgetsProvider>
         </ThemeProvider>
-      </SettingsProvider>  
-    </TransactionsProvider>
-  </BudgetsProvider>  
+      </SettingsProvider>
+    </AuthProvider>
   </StrictMode>
 );

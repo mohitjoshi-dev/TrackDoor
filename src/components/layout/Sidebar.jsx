@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { PanelLeftClose, PanelLeftOpen, Wallet } from "lucide-react";
+import { useState, useEffect } from "react";
+import { PanelLeftClose, PanelLeftOpen, Wallet, Menu, X, } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import SidebarItem from "./SidebarItem";
@@ -9,6 +9,22 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "@/services/auth.service";
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth < 1024);
+
+      if (window.innerWidth >= 1024) {
+        setMobileOpen(false);
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -25,11 +41,21 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`relative flex h-full flex-col overflow-hidden border-r border-border bg-background/70 backdrop-blur-2xl transition-all duration-300 shadow-[0_0_50px_rgba(var(--color-primary),0.06)] ${
-        collapsed ? "w-20" : "w-72"
-      }`}
+      className={`fixed left-0 top-0 z-50 h-screen flex flex-col overflow-hidden border-r border-border bg-background/70 backdrop-blur-2xl shadow-[0_0_50px_rgba(var(--color-primary),0.06)] transition-all duration-300
+                  ${
+                    isMobile
+                      ? `${mobileOpen ? "translate-x-0" : "-translate-x-full"} w-72`
+                      : `relative translate-x-0 ${collapsed ? "w-20" : "w-72"}`
+                  }
+                  `}
     >
       <div className="pointer-events-none absolute -left-24 top-32 h-80 w-80 rounded-full bg-primary/10 blur-[120px]" />
+                  {isMobile && mobileOpen && (
+                    <div
+                      onClick={() => setMobileOpen(false)}
+                      className="fixed inset-0 -z-10 bg-black/50 backdrop-blur-sm"
+                    />
+                  )}
       <div className="pointer-events-none absolute -bottom-20 left-0 h-60 w-60 rounded-full bg-blue-500/5 blur-[120px]" />
       <div
         className={`flex h-20 items-center border-b border-border transition-all duration-300 ${
@@ -63,7 +89,13 @@ export default function Sidebar() {
           className={`shrink-0 rounded-lg text-muted-foreground transition-all duration-300 hover:bg-secondary hover:text-primary hover:shadow-md hover:shadow-primary/10 ${
             collapsed ? "h-8 w-8" : ""
           }`}
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            if (isMobile) {
+              setMobileOpen(false);
+            } else {
+              setCollapsed(!collapsed);
+            }
+          }}
         >
           {collapsed ? (
             <PanelLeftOpen className="h-4 w-4" />

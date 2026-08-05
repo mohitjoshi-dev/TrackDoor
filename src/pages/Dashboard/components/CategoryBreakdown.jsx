@@ -38,7 +38,7 @@ export default function CategoryBreakdown() {
       value,
       color: colors[name] || "#94a3b8",
     }));
-  }, [transactions]);
+  }, [transactions, preferences.currency]);
 
   const totalExpense = useMemo(() => {
     return categoryData.reduce(

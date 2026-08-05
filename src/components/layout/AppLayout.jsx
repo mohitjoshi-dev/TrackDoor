@@ -11,7 +11,7 @@ export default function AppLayout() {
         <Navbar />
 
         {/* Changed bg-slate-950/70 to bg-transparent */}
-        <main className="relative flex-1 overflow-y-auto bg-transparent p-6 transition-colors duration-300 z-0">
+        <main className="relative z-0 flex-1 overflow-y-auto bg-transparent p-4 transition-colors duration-300 sm:p-6"> 
           {/* Top Right Glow */}
           <div
             className="

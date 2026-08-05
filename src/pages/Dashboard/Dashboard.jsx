@@ -8,12 +8,14 @@ import { useMemo } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useSettings } from "@/context/SettingsContext";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { useAuth } from "@/context/AuthContext";
+import { getGreeting } from "@/utils/greeting";
 
 export default function Dashboard() {
 const { preferences } = useSettings();
-
+const { profile } = useAuth();
 const { transactions } = useTransactions(); 
-console.log("Dashboard Transactions:", transactions);
+const greeting = getGreeting();
 
 const stats = useMemo(() => {
   const income = transactions
@@ -67,14 +69,14 @@ const stats = useMemo(() => {
       color: "violet",
     },
   ];
-}, [transactions]);
+}, [transactions, preferences.currency]);
 
   return (
     <div className="space-y-8">
       <WelcomeBanner
-        greeting="Good Evening"
-        username="Mohit"
-        description="Track your spending, monitor budgets, and stay on top of your financial goals."
+        greeting={`${greeting.emoji} ${greeting.text}`}
+        username={profile?.full_name || "User"}
+        description={greeting.description}
         buttonText="Add Transaction"
         buttonIcon={Plus}
         onButtonClick={() => console.log("Clicked")}

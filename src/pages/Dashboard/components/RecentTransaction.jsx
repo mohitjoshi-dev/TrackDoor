@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function RecentTransactions() {
-  const { transactions, setTransactions } = useTransactions();
+  const { transactions, deleteTransaction } = useTransactions();
   const recentTransactions = [...transactions].slice(0, 4 );
 
   return (
@@ -35,12 +35,13 @@ export default function RecentTransactions() {
           <TransactionItem
             key={transaction.id}
             transaction={transaction}
-            onDelete={(id) => {
-              setTransactions((prev) =>
-                prev.filter((t) => t.id !== id)
-              );
-
-              toast.success("Transaction deleted successfully!");
+            onDelete={async (id) => {
+              try {
+                await deleteTransaction(id);
+                toast.success("Transaction deleted successfully!");
+              } catch (error) {
+                toast.error(error.message);
+              }
             }}
           />
         ))}

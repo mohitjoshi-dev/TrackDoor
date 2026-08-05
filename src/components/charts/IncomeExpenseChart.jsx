@@ -22,6 +22,7 @@ import {
 import { Calendar } from "lucide-react";
 import { useSettings } from "@/context/SettingsContext";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { capitalize } from "@/utils/stringUtils";
 
 const COLORS = ["url(#incomeGradient)", "url(#expenseGradient)"];
 
@@ -327,7 +328,11 @@ export default function IncomeExpenseChart({
                   Highest Expense
                 </p>
                 <h3 className="text-base sm:text-lg xl:text-xl font-bold text-[#a855f7] tracking-tight">
-                  {highestExpenseCategory || "No Expenses"}
+                  {
+                    highestExpenseCategory
+                      ? capitalize(highestExpenseCategory)
+                      : "No Expenses"
+                  }
                 </h3>
 
                 <p className="mt-0.5 text-[10px] xl:text-[11px] text-slate-500 leading-tight">

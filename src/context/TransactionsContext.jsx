@@ -1,60 +1,115 @@
+import { useAuth } from "@/context/AuthContext";
+import { getTransactions, addTransaction as addTransactionService, updateTransaction as updateTransactionService, 
+         deleteTransaction as deleteTransactionService,} from "@/services/transaction.service";
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { recentTransactions } from "@/constants/transactions";
 
 const TransactionsContext = createContext();
 
 export function TransactionsProvider({ children }) {
-  const [transactions, setTransactions] = useState(() => {
-    try {
-      const savedTransactions = localStorage.getItem("transactions");
-
-      return savedTransactions
-        ? JSON.parse(savedTransactions)
-        : recentTransactions;
-    } catch (error) {
-      console.warn("Error reading transactions:", error);
-      return recentTransactions;
-    }
-  });
+  const [transactions, setTransactions] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
-    localStorage.setItem(
-      "transactions",
-      JSON.stringify(transactions)
-    );
-  }, [transactions]);
+    async function loadTransactions() {
+      if (!user) return;
+
+      const { data, error } = await getTransactions(user.id);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setTransactions(
+        data.map((transaction) => ({
+          ...transaction,
+          date: transaction.transaction_date,
+          notes: transaction.description,
+        }))
+      );
+    }
+
+    loadTransactions();
+  }, [user]);
 
   // Add Transaction
-  const addTransaction = (transaction) => {
+  const addTransaction = async (transaction) => {
+    console.log("Logged in user:", user);
+    console.log("User ID being sent:", user.id);
+    console.log("Transaction:", transaction);
+
+    if (!user) return;
+
+    const { data, error } = await addTransactionService({
+      user_id: user.id,
+      title: transaction.title,
+      amount: transaction.amount,
+      type: transaction.type,
+      category: transaction.category,
+      transaction_date: transaction.date,
+      description: transaction.notes,
+    });
+
+    if (error) {
+      console.error("Supabase Error:", error);
+      alert(JSON.stringify(error, null, 2));
+      return;
+    }
+
     setTransactions((prev) => [
       {
-        id: Date.now(),
-        ...transaction,
+        ...data,
+        date: data.transaction_date,
+        notes: data.description,
       },
       ...prev,
     ]);
   };
 
   // Update Transaction
-  const updateTransaction = (id, updatedTransaction) => {
-    setTransactions((prev) =>
-      prev.map((transaction) =>
-        transaction.id === id
-          ? {
-              ...transaction,
-              ...updatedTransaction,
-            }
-          : transaction
+  const updateTransaction = async (id, updatedTransaction) => {
+  const { data, error } = await updateTransactionService(id, {
+    title: updatedTransaction.title,
+    amount: updatedTransaction.amount,
+    type: updatedTransaction.type,
+    category: updatedTransaction.category,
+    transaction_date: updatedTransaction.date,
+    description: updatedTransaction.notes,
+  });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  setTransactions((prev) =>
+    prev.map((transaction) =>
+      transaction.id === id
+    ? {
+        ...data,
+        date: data.transaction_date,
+        notes: data.description,
+      }
+    : transaction
       )
     );
   };
 
   // Delete Transaction
-  const deleteTransaction = (id) => {
-    setTransactions((prev) =>
-      prev.filter((transaction) => transaction.id !== id)
-    );
-  };
+  const deleteTransaction = async (id) => {
+  const { error } = await deleteTransactionService(id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  setTransactions((prev) =>
+    prev.filter((transaction) => transaction.id !== id)
+  );
+};
 
   return (
     <TransactionsContext.Provider

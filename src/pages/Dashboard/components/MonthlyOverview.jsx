@@ -14,7 +14,7 @@ import {
 } from "recharts";
 
 export default function MonthlyOverview() {
-  const [selectedPeriod, setSelectedPeriod] = useState("30D");
+  const [selectedPeriod, setSelectedPeriod, ] = useState("30D");
   const { transactions } = useTransactions();
   const { preferences } = useSettings();
 
