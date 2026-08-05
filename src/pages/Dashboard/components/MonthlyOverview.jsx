@@ -19,31 +19,40 @@ export default function MonthlyOverview() {
   const { preferences } = useSettings();
 
   const chartData = useMemo(() => {
-    const limit =
-      selectedPeriod === "7D"
-        ? 7
-        : selectedPeriod === "30D"
-        ? 30
-        : 12;
 
     const grouped = {};
 
-    transactions.slice(0, limit).forEach((transaction) => {
+    const now = new Date();
+
+    const filteredTransactions = transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+
+      if (selectedPeriod === "7D") {
+        return now - transactionDate <= 7 * 24 * 60 * 60 * 1000;
+      }
+
+      if (selectedPeriod === "30D") {
+        return now - transactionDate <= 30 * 24 * 60 * 60 * 1000;
+      }
+
+      return transactionDate.getFullYear() === now.getFullYear();
+    });
+
+    filteredTransactions.forEach((transaction) => {
         let displayDate = transaction.date;
 
       if (displayDate && (displayDate.includes("T") || displayDate.includes("-"))) {
         const dateObj = new Date(displayDate);
         if (!isNaN(dateObj.getTime())) {
-          displayDate = formatDate(
-            dateObj,
-            preferences.dateFormat,
-            preferences.timezone
-          );
+          displayDate = dateObj.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+          });
         }
       }
 
       if (!grouped[displayDate]) {
-        grouped[displayDate] = { month: displayDate, income: 0, expense: 0 };
+        grouped[displayDate] = { date: transaction.date, month: displayDate, income: 0, expense: 0 };
       }
 
       if (transaction.type === "income") {
@@ -53,7 +62,9 @@ export default function MonthlyOverview() {
       }
     });
 
-    return Object.values(grouped);
+    return Object.values(grouped).sort(
+  (a, b) => new Date(a.date) - new Date(b.date)
+);
   }, [transactions, selectedPeriod]);
 
   return (
@@ -117,8 +128,8 @@ export default function MonthlyOverview() {
             data={chartData}
             margin={{
               top: 10,
-              right: 10,
-              left: -10,
+              right: 20,
+              left: 5,
               bottom: 0,
             }}
           >
@@ -133,7 +144,7 @@ export default function MonthlyOverview() {
               stroke="var(--color-muted-foreground)"
               tickLine={false}
               axisLine={false}
-              padding={{ left: 35, right: 35 }}
+              padding={{ left: 50, right: 35 }}
               tickMargin={11}
             />
 

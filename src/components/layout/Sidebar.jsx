@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { PanelLeftClose, PanelLeftOpen, Wallet, Menu, X, } from "lucide-react";
+import { useState, } from "react";
+import { PanelLeftClose, PanelLeftOpen, Wallet } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import SidebarItem from "./SidebarItem";
@@ -7,24 +7,10 @@ import { primaryNavigation, secondaryNavigation } from "@/constants/navigation";
 
 import { useNavigate } from "react-router-dom";
 import { signOut } from "@/services/auth.service";
-export default function Sidebar() {
+
+
+export default function Sidebar({ mobileOpen, setMobileOpen, isMobile }) {
   const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
-
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth < 1024);
-
-      if (window.innerWidth >= 1024) {
-        setMobileOpen(false);
-      }
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const navigate = useNavigate();
 
@@ -50,12 +36,7 @@ export default function Sidebar() {
                   `}
     >
       <div className="pointer-events-none absolute -left-24 top-32 h-80 w-80 rounded-full bg-primary/10 blur-[120px]" />
-                  {isMobile && mobileOpen && (
-                    <div
-                      onClick={() => setMobileOpen(false)}
-                      className="fixed inset-0 -z-10 bg-black/50 backdrop-blur-sm"
-                    />
-                  )}
+                  
       <div className="pointer-events-none absolute -bottom-20 left-0 h-60 w-60 rounded-full bg-blue-500/5 blur-[120px]" />
       <div
         className={`flex h-20 items-center border-b border-border transition-all duration-300 ${

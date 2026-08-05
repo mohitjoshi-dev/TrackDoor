@@ -1,16 +1,4 @@
-import {
-  Palette,
-  Moon,
-  Sun,
-  Monitor, 
-  Plus,
-  Search,
-  ChevronDown,
-  Check,
-  Circle,
-  RefreshCw,
-} from "lucide-react";
-
+import { Palette, Moon, Sun, Plus, Search, Check, Circle, Menu } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,26 +14,39 @@ import { Input } from "@/components/ui/input";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import ProfileMenu from "@/components/profile/ProfileMenu";
 
-export default function Navbar() {
+export default function Navbar({ mobileOpen, setMobileOpen, isMobile }) {
   const { settings, updateSetting } = useSettings();
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-border bg-background/80 px-8 backdrop-blur-xl transition-all duration-300 supports-backdrop-filter:bg-background/60 shadow-sm">
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-border bg-background/80 px-4 lg:px-8 backdrop-blur-xl transition-all duration-300 supports-backdrop-filter:bg-background/60 shadow-sm">
       {/* Left */}
+      <div className="flex items-center gap-3">
+      {isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setMobileOpen(true)}
+          className="lg:hidden"
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+      )}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+
+        <h1 className="text-xl font-bold tracking-tight text-foreground lg:text-2xl">
           Dashboard
         </h1>
       </div>
+      </div>
 
       {/* Right */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 lg:gap-4">
         {/* Search */}
         <div className="relative hidden lg:block">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search transactions..."
-            className="h-11 w-80 rounded-xl border-border bg-secondary/50 backdrop-blur-md pl-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
+            className="h-11 w-115 rounded-xl border-border bg-secondary/50 backdrop-blur-md pl-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
           />
         </div>
 
@@ -56,7 +57,7 @@ export default function Navbar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              className="h-11 gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:opacity-90"
+              className="hidden h-11 gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:opacity-90 md:flex"
             >
               <Palette className="h-4 w-4" />
               <span className="hidden xl:block">Appearance</span>
@@ -94,7 +95,7 @@ export default function Navbar() {
         </DropdownMenu>
 
         {/* Add Button */}
-        <Button className="h-11 gap-2 rounded-xl bg-primary px-6 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:opacity-90">
+        <Button className="hidden h-11 gap-2 rounded-xl bg-primary px-6 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:opacity-90 lg:flex">
           <Plus className="h-4 w-4" />
           Add Expense
         </Button>
