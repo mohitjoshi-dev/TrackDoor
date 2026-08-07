@@ -3,13 +3,13 @@ import StatsCard from "@/pages/Dashboard/components/StatsCard";
 import MonthlyOverview from "@/pages/Dashboard/components/MonthlyOverview";
 import CategoryBreakdown from "@/pages/Dashboard/components/CategoryBreakdown";
 import RecentTransaction from "@/pages/Dashboard/components/RecentTransaction";
-import { Plus } from "lucide-react";
 import { useMemo } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useSettings } from "@/context/SettingsContext";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { useAuth } from "@/context/AuthContext";
 import { getGreeting } from "@/utils/greeting";
+import AIInsightCard from "@/pages/Dashboard/components/AIInsights/AIInsightCard";
 
 export default function Dashboard() {
 const { preferences } = useSettings();
@@ -73,14 +73,18 @@ const stats = useMemo(() => {
 
   return (
     <div className="space-y-8">
-      <WelcomeBanner
-        greeting={`${greeting.emoji} ${greeting.text}`}
-        username={profile?.full_name || "User"}
-        description={greeting.description}
-        buttonText="Add Transaction"
-        buttonIcon={Plus}
-        onButtonClick={() => console.log("Clicked")}
-      />
+      <section className="grid grid-cols-12 gap-6 items-stretch">
+      <div className="col-span-5">
+        <WelcomeBanner
+          greeting={`${greeting.emoji} ${greeting.text}`}
+          username={profile?.full_name || "User"}
+          description={greeting.description}
+        />
+      </div>
+      <div className="col-span-7">
+        <AIInsightCard />
+      </div>
+    </section>
 
       <section>
         <div className="grid grid-cols-4 gap-6">
