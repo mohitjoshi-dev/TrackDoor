@@ -2,6 +2,7 @@ import { Plus, Search, LayoutGrid } from "lucide-react";
 import TransactionItem from "@/pages/Transactions/components/TransactionItem";
 import { useState, useRef } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
+import { useQuickAdd } from "@/context/QuickAddContext";
 
 import {
   Dialog,
@@ -21,7 +22,6 @@ import { useSettings } from "@/context/SettingsContext";
 import { formatDate } from "@/utils/formatDate";
 
 export default function Transactions() {
-  const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");  
   const [editOpen, setEditOpen] = useState(false);
@@ -35,6 +35,7 @@ export default function Transactions() {
   
   // Using the global context instead of local state!
   const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
+  const { openQuickAdd } = useQuickAdd();
   const { addNotification } = useNotifications();
 
   const filteredTransactions = [...transactions]
@@ -73,7 +74,7 @@ export default function Transactions() {
         </div>
 
         <button
-          onClick={() => setOpen(true)}
+          onClick={() => openQuickAdd("expense")}
           className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 font-medium text-primary-foreground transition-all duration-300 hover:opacity-90"
         >
           <Plus size={18} />
@@ -230,42 +231,7 @@ export default function Transactions() {
               ))
             )}
         </div>
-      </div>
-
-      {/* Add Transaction Dialog */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="overflow-hidden p-0 sm:max-w-xl">
-          <DialogHeader className="border-b px-6 py-5">
-            <DialogTitle className="text-2xl font-bold">
-              Add Transaction
-            </DialogTitle>
-            <DialogDescription>
-              Record your income or expenses to keep your budget up to date.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="px-6 py-5">
-            <TransactionForm
-              onCancel={() => setOpen(false)}
-              onSubmit={(data) => {
-              addTransaction(data);
-
-              addNotification({
-                title: "Expense Added",
-                message: `${formatCurrency(
-                  data.amount,
-                  preferences.currency
-                )} added to ${data.category}`,
-                type: "success",
-              });
-
-              toast.success("Transaction added successfully!");
-              setOpen(false);
-            }}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+      </div>  
 
       {/* Edit Transaction Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>

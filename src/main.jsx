@@ -9,6 +9,8 @@ import { Toaster } from "sonner";
 import { BudgetsProvider } from "@/context/BudgetsContext";
 import { SettingsProvider } from "@/context/SettingsContext";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { QuickAddProvider } from "@/context/QuickAddContext";
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -18,8 +20,10 @@ createRoot(document.getElementById("root")).render(
           <BudgetsProvider>
             <TransactionsProvider>
               <NotificationProvider>
+                <QuickAddProvider>
                 <App />
                 <Toaster richColors position="top-right" />
+                </QuickAddProvider>
               </NotificationProvider>
             </TransactionsProvider>
           </BudgetsProvider>

@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import GlobalQuickAddDialog from "./GlobalQuickAddDialog";
 
 export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -92,6 +93,7 @@ export default function AppLayout() {
             <Outlet />
           </div>
         </main>
+        <GlobalQuickAddDialog />
       </div>
     </div>
   );
