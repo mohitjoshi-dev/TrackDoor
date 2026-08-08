@@ -1,15 +1,10 @@
 import { useMemo } from "react";
 import { Calendar, ChevronDown, Check } from "lucide-react";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
 
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/context/SettingsContext";
-import { formatDate } from "@/utils/formatDate";
 
 export default function BudgetMonthPicker({selectedMonth,onChange,transactions = [],}) {
   const { preferences } = useSettings();

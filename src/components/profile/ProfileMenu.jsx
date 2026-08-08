@@ -1,12 +1,5 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
+import { useState } from "react";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import {
   User,
   Settings,
@@ -22,12 +15,18 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "@/services/auth.service";
 import { useAuth } from "@/context/AuthContext";
+import HelpSupportDialog from "@/pages/Settings/components/HelpSupportDialog";
+import ExportDialog from "@/pages/Settings/dialogs/ExportDialog";
+import ImportDialog from "@/pages/Settings/dialogs/ImportDialog";
 
 export default function ProfileMenu() {
+  
 const navigate = useNavigate();
 const { profile } = useAuth();
-
-async function handleLogout() {
+const [helpOpen, setHelpOpen] = useState(false);
+const [exportOpen, setExportOpen] = useState(false);
+const [importOpen, setImportOpen] = useState(false);
+  async function handleLogout() {
   const { error } = await signOut();
 
   if (error) {
@@ -115,7 +114,7 @@ async function handleLogout() {
 
         <DropdownMenuItem
         className="cursor-pointer rounded-xl py-3"
-        onClick={() => navigate("/export")}
+        onClick={() => setExportOpen(true)}
         >
           <Download className="mr-3 h-4 w-4" />
           <span className="flex-1">Export Data</span>
@@ -124,7 +123,7 @@ async function handleLogout() {
 
         <DropdownMenuItem
         className="cursor-pointer rounded-xl py-3"
-        onClick={() => navigate("/import")}
+        onClick={() => setImportOpen(true)}
         >
           <Upload className="mr-3 h-4 w-4" />
           <span className="flex-1">Import Data</span>
@@ -133,7 +132,7 @@ async function handleLogout() {
 
         <DropdownMenuItem
         className="cursor-pointer rounded-xl py-3"
-        onClick={() => navigate("/help")}
+        onClick={() => setHelpOpen(true)}
         >
           <CircleHelp className="mr-3 h-4 w-4" />
           <span className="flex-1">Help & Support</span>
@@ -150,6 +149,21 @@ async function handleLogout() {
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
+        
+        <HelpSupportDialog
+          open={helpOpen}
+          onOpenChange={setHelpOpen}
+        />
+
+        <ExportDialog
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+        />
+
+        <ImportDialog
+          open={importOpen}
+          onOpenChange={setImportOpen}
+        />
     </DropdownMenu>
   );
 }

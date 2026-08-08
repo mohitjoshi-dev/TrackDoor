@@ -1,4 +1,4 @@
-import { Wallet, TrendingDown, PiggyBank } from "lucide-react";
+import { Wallet, } from "lucide-react";
 import BudgetProgress from "./BudgetProgress";
 import { useBudgets } from "@/context/BudgetsContext";
 import { useTransactions } from "@/context/TransactionsContext";

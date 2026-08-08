@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Palette, Moon, Sun, Plus, Search, Check, Circle, Menu } from "lucide-react";
 import {
   DropdownMenu,
@@ -19,6 +21,8 @@ export default function Navbar({ mobileOpen, setMobileOpen, isMobile }) {
   const { settings, updateSetting } = useSettings();
   const { openQuickAdd } = useQuickAdd();
 
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-border bg-background/80 px-4 lg:px-8 backdrop-blur-xl transition-all duration-300 supports-backdrop-filter:bg-background/60 shadow-sm">
       {/* Left */}
@@ -48,6 +52,13 @@ export default function Navbar({ mobileOpen, setMobileOpen, isMobile }) {
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search transactions..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && searchTerm.trim()) {
+                navigate(`/transactions?search=${encodeURIComponent(searchTerm.trim())}`);
+              }
+            }}
             className="h-11 w-115 rounded-xl border-border bg-secondary/50 backdrop-blur-md pl-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
           />
         </div>

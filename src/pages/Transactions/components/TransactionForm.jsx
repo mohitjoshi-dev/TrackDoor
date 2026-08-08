@@ -1,23 +1,13 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
 import { useSettings } from "@/context/SettingsContext";
 import { useState, useEffect } from "react";
 import { categoryData } from "@/constants/categoryData";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import {Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
 
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";

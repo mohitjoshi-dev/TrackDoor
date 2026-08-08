@@ -1,14 +1,4 @@
-import {
-  Wallet,
-  CreditCard,
-  PiggyBank,
-  TrendingUp,
-  Receipt,
-  ShoppingBag,
-  Landmark,
-  BadgeIndianRupee,
-} from "lucide-react";
-
+import { Wallet, CreditCard, PiggyBank, TrendingUp, Receipt, ShoppingBag, Landmark, BadgeIndianRupee } from "lucide-react";
 import { useState } from "react";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useBudgets } from "@/context/BudgetsContext";

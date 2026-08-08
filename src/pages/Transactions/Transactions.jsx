@@ -1,6 +1,7 @@
 import { Plus, Search, LayoutGrid } from "lucide-react";
 import TransactionItem from "@/pages/Transactions/components/TransactionItem";
 import { useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTransactions } from "@/context/TransactionsContext";
 import { useQuickAdd } from "@/context/QuickAddContext";
 
@@ -17,12 +18,13 @@ import { toast } from "sonner";
 import { categoryData } from "@/constants/categoryData";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/context/NotificationContext";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { useSettings } from "@/context/SettingsContext";
-import { formatDate } from "@/utils/formatDate";
 
 export default function Transactions() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
+
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || ""
+  );
   const [selectedCategory, setSelectedCategory] = useState("all");  
   const [editOpen, setEditOpen] = useState(false);
   const scrollRef = useRef(null);
@@ -34,7 +36,7 @@ export default function Transactions() {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   
   // Using the global context instead of local state!
-  const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
+  const { transactions, updateTransaction, deleteTransaction } = useTransactions();
   const { openQuickAdd } = useQuickAdd();
   const { addNotification } = useNotifications();
 
@@ -60,7 +62,6 @@ export default function Transactions() {
       new Date(a.date).getTime()
   );
 
-  const { preferences } = useSettings();
 
   return (
     <div className="space-y-6">

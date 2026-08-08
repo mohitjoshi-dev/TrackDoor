@@ -1,6 +1,6 @@
 import { X, Bot, Sparkles, SendHorizontal } from "lucide-react";
 import { askAI } from "@/services/askAIService";
-import {useEffect, useState, } from "react";
+import {useEffect, useState, useRef, } from "react";
 
 
 
@@ -25,6 +25,7 @@ export default function AIChatDrawer({ open, onClose, report, }) {
 
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
     sessionStorage.setItem(
@@ -32,6 +33,12 @@ export default function AIChatDrawer({ open, onClose, report, }) {
         JSON.stringify(messages)
         );
     }, [messages]);
+
+    useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }, [messages, loading]);
 
     const sendMessage = async () => {
     if (!input.trim()) return;
@@ -118,6 +125,7 @@ export default function AIChatDrawer({ open, onClose, report, }) {
                 Thinking...
                 </div>
             )}
+            <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}
