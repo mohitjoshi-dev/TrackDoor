@@ -9,6 +9,12 @@ lerna-debug.log*
 
 node_modules
 dist
+
+# Secrets
+.env
+.env.*
+!.env.example
+
 dist-ssr
 *.local
 
